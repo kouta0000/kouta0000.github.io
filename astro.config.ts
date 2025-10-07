@@ -38,11 +38,11 @@ import reading from "./src/utils/remark/reading";
 export default defineConfig({
   output: 'static',
   base: '/tlog/',
-  site: "https://thought-lite.vercel.app",
+  site: "https://kouta0000.github.io/tlog",
   trailingSlash: "never",
   i18n: {
-    locales: ["en", "zh-cn", "ja"],
-    defaultLocale: "en",
+    locales: ["ja"],
+    defaultLocale: "ja",
     routing: {
       redirectToDefaultLocale: false,
       prefixDefaultLocale: false,
