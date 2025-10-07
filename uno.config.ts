@@ -29,7 +29,7 @@ export default defineConfig({
 		},
 		fontFamily: {
 			mono: ["Maple Mono NF CN", "monospace"],
-			cursive: ["Playwrite MX", "The Peak Font Plus", "serif"],
+			cursive: ["Zen Kurenaido", "The Peak Font Plus", "serif"],
 		},
 		animation: {
 			keyframes: {
