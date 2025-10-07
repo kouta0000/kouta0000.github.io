@@ -37,6 +37,7 @@ import reading from "./src/utils/remark/reading";
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
+  base: '/tlog/'
   site: "https://thought-lite.vercel.app",
   trailingSlash: "never",
   i18n: {
