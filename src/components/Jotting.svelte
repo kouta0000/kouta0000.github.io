@@ -100,7 +100,7 @@
 			</footer>
 		{/if}
 	</article>
-	<aside class="sm:flex-basis-200px flex flex-col gap-5">
+	<aside class="sm:flex-basis-200px flex flex-col gap-5 hidden md:block">
 		<section>
 			<h3>{t("jotting.tag")}</h3>
 			<p>
