@@ -41,7 +41,7 @@ export default defineConfig({
   site: "https://kouta0000.github.io/tlog",
   trailingSlash: "never",
   i18n: {
-    locales: ["ja"],
+    locales: ["ja","en"],
     defaultLocale: "ja",
     routing: {
       redirectToDefaultLocale: false,
