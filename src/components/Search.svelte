@@ -1,6 +1,6 @@
 <script lang='ts'>
     import {onMount} from 'svelte';
-    import {Index} from 'flexsearch';
+    import { Index} from 'flexsearch';
 	import { restoreFocus } from 'astro/virtual-modules/transitions-swap-functions.js';
     interface Doc {
         id: string;
@@ -8,10 +8,11 @@
         body?: string;
     }
     let query = $state('');
-    let index = $state( new Index({tokenize:'forward', cache: true}));
+    let index:any = $state();
     let documents: Doc[] = $state([]);
     let results: (Doc|undefined)[] = $state([]);
     onMount(async()=>{
+        index = new Index({tokenize:'forward', cache: true});
         const res = await fetch('/search-index.json');
         documents = await res.json();
         documents.forEach(doc=>{
