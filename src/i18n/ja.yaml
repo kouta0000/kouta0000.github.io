@@ -1,6 +1,6 @@
 about:
-  introduction: 小泉幸太
-  roll: ソーシャルリンク
+  introduction: Qui suis-je ?
+  roll: Qu'est-ce que c'est que ça ?
 feed:
   address: 登録アドレス
   copy:
@@ -16,28 +16,28 @@ home:
     empty: なし
     jotting: ノート {count} 件
     note: メモ {count} 件
-  newest: latest
+  newest: Dernièr cahier
   prefaces: はじめに
 jotting:
   tag: タグ
 navigation:
-  about: about
-  home: home
+  about: à propos
+  home: accueil
   jotting: notes
-  note: memos
+  note: cahiers
   policy: policy
   preface: preface
   subscription: 登録
 note:
-  contents: 目次
-  series: シリーズ
-  tag: タグ
-  top: トップ
+  contents: table de matières
+  series: séries
+  tag: tags
+  top: haut de page
 read:
   words: '{words} 字'
 sensitive:
   back: 一覧に戻る
-  continue: 読む
+  continue: 読み進める
   description: このコンテンツには過激な内容が含まれている可能性があります。
   feed: |-
     <p>このコンテンツには過激な内容が含まれている可能性があります。 </p>

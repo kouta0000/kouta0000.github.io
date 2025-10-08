@@ -65,7 +65,7 @@
 
 <main class="flex flex-col-reverse sm:flex-row gap-10 grow">
 	<article class="flex flex-col grow">
-		<header class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5 hidden">
+		<header class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
 			{#each list as jotting (jotting.id)}
 				<section animate:flip={{ duration: 150 }} class="flex flex-col justify-center gap-0.5 b-2 b-solid b-weak rd-2 py-2 px-3">
 					<span class="flex items-center gap-1">
@@ -100,7 +100,7 @@
 			</footer>
 		{/if}
 	</article>
-	<aside class="sm:flex-basis-200px flex flex-col gap-5 hidden md:block">
+	<aside class="sm:flex-basis-200px flex flex-col gap-5">
 		<section>
 			<h3>{t("jotting.tag")}</h3>
 			<p>

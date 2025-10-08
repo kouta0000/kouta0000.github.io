@@ -63,12 +63,12 @@
 	}
 </style>
 
-<main class="flex flex-col-reverse sm:flex-row gap-10 grow">
+<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-20">
 	<article class="flex flex-col gap-4 grow">
 		{#each list as note (note.id)}
-			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row">
+			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row" >
 				<div class="flex flex-col gap-1">
-					<div class="flex gap-1 items-center">
+					<div class="flex gap-1 items-center border-l-solid border-6 pl-2 border-gray-300">
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
@@ -76,6 +76,7 @@
 					</div>
 					<time title={Time.full(note.data.timestamp)} class="font-mono text-2.6 c-remark">{Time(note.data.timestamp)}</time>
 				</div>
+				
 				<span class="flex items-center gap-1 sm:ml-a c-remark">
 					{#each note.data.tags as tag}
 						<button onclick={() => switch_tag(tag, true)} class="text-3.5 sm:text-sm">#{tag}</button>
@@ -103,25 +104,7 @@
 		{/if}
 	</article>
 
-	<aside class="sm:flex-basis-200px flex flex-col gap-5">
-		<section>
-			<h3>{t("note.series")}</h3>
-			<p>
-				{#each series_list as series_item (series_item)}
-					<button class:selected={series_item == series} onclick={() => choose_series(series_item)}>{series_item}</button>
-				{/each}
-			</p>
-		</section>
-
-		<section>
-			<h3>{t("note.tag")}</h3>
-			<p>
-				{#each tag_list as tag (tag)}
-					<button class:selected={tags.includes(tag)} onclick={() => switch_tag(tag)}>{tag}</button>
-				{/each}
-			</p>
-		</section>
-	</aside>
+	
 </main>
 
 <script lang="ts">

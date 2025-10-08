@@ -33,11 +33,12 @@ import abbr from "./src/utils/remark/abbr";
 import wrapper from "./src/utils/remark/table-wrapper";
 import copy from "./src/utils/code-copy";
 import reading from "./src/utils/remark/reading";
-
+import pagefind from "astro-pagefind";
+const isdev = process.env.NODE_ENV === "development"
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  base: '/tlog/',
+  base: isdev ? '' : '/tlog/',
   site: "https://kouta0000.github.io/tlog",
   trailingSlash: "never",
   i18n: {
@@ -111,6 +112,7 @@ export default defineConfig({
     plugins: [yaml()]
   },
   integrations: [
+    pagefind(),
     svelte(),
     sitemap(),
     swup({
