@@ -36,7 +36,7 @@ import reading from "./src/utils/remark/reading";
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  base: '/tlog/',
+  base: '/',
   site: "https://kouta0000.github.io/tlog",
   trailingSlash: "never",
   i18n: {

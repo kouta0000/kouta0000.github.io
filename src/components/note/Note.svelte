@@ -62,13 +62,13 @@
 		}
 	}
 </style>
-
+<Search />
 <main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-20">
 	<article class="flex flex-col gap-4 grow">
 		{#each list as note (note.id)}
 			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row" >
-				<div class="flex flex-col gap-1">
-					<div class="flex gap-1 items-center border-l-solid border-6 pl-2 border-gray-300">
+				<div class="flex flex-col gap-1 md:px-30">
+					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300">
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
@@ -112,6 +112,7 @@
 	import { onMount, type Snippet } from "svelte";
 	import { flip } from "svelte/animate";
 	import { fade } from "svelte/transition";
+	import Search from '$components/Search.svelte'
 	import Time from "$utils/time";
 	import i18nit from "$i18n";
 

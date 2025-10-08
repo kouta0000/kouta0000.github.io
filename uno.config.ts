@@ -1,6 +1,8 @@
 import { defineConfig } from "unocss";
 import VariantGroup from "@unocss/transformer-variant-group";
 import Directives from "@unocss/transformer-directives";
+import presetWind4 from '@unocss/preset-wind4';
+import { presetDaisy } from "@ameinhardt/unocss-preset-daisy";
 
 export default defineConfig({
 	transformers: [
