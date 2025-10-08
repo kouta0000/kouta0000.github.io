@@ -16,7 +16,7 @@ home:
     empty: なし
     jotting: ノート {count} 件
     note: メモ {count} 件
-  newest: Dernièr cahier
+  newest: Dernier cahier
   prefaces: はじめに
 jotting:
   tag: タグ

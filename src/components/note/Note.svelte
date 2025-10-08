@@ -63,7 +63,7 @@
 	}
 </style>
 <Search />
-<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-20">
+<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-10">
 	<article class="flex flex-col gap-4 grow">
 		{#each list as note (note.id)}
 			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row" >
