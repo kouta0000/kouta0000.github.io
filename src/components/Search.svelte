@@ -73,7 +73,7 @@
         id="default-search"
         bind:value={query}
         on:input={handleQuery}
-        on:focusout={() => { setTimeout(()=>{results = []; query = '';},300) }}
+        on:focusout={() => { setTimeout(()=>{results = []; query = ''; },300)}}
         class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
@@ -82,10 +82,9 @@
   
     <div class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
       {#each results as item}
-        <div class="p-2 relative">
-            <a href={`/content/note/${String(item.id)}`} class="absolute inset-0 z-10 hover:bg-gray-500/10"></a>
+        <div class="p-2">
           <p class="w-full text-sm text-gray-600 px-8 mb-2">
-            {item.title}
+            <a href={`/content/note/${String(item.id)}`} class="link">{item.title}</a>
           </p>
           <p class="w-full text-xs text-gray-500 px-10 line-clamp-1">{item.body ?? ''}</p>
         </div>
