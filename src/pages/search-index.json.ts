@@ -7,9 +7,5 @@ import type { APIRoute } from "astro";
         title: post.data.title,
         body: post.body,
     }));
-    return new Response(JSON.stringify(indexData), {
-        headers: {
-            'Content-type': 'application/json'
-        },
-    });
+    return new Response(JSON.stringify(indexData));
  };
