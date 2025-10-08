@@ -17,7 +17,7 @@
     onMount(async () => {
       try {
         const base = import.meta.env.BASE_URL ?? '/';
-        const res = await fetch(`${base}search-index.json`, {
+        const res = await fetch(`${base}search-index`, {
           headers: { 'accept': 'application/json' },
           cache: 'no-store' // CDN/キャッシュの揺れ対策
         });
