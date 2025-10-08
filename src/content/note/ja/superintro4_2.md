@@ -2,7 +2,6 @@
 title: 第4講その2　人称変化
 tags:
   - フランス語
-  - 人称変化
 timestamp: 2025-09-15
 description: 人称変化を実際に覚える
 ---
