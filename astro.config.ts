@@ -33,11 +33,10 @@ import abbr from "./src/utils/remark/abbr";
 import wrapper from "./src/utils/remark/table-wrapper";
 import copy from "./src/utils/code-copy";
 import reading from "./src/utils/remark/reading";
-const isdev = process.env.NODE_ENV === "development"
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  base: isdev ? '' : '/tlog/',
+  base: '/tlog/',
   site: "https://kouta0000.github.io/tlog",
   trailingSlash: "never",
   i18n: {
