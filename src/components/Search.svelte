@@ -82,9 +82,10 @@
   
     <div class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
       {#each results as item}
-        <div class="p-2">
+        <div class="p-2 relative">
+            <a href={`/note/${String(item.id)}`} class="absolute inset-0 hover:bg-gray-500/10"></a>
           <p class="w-full text-sm text-gray-600 px-8 mb-2">
-            <a href={`/content/note/${String(item.id)}`} class="link">{item.title}</a>
+            {item.title}
           </p>
           <p class="w-full text-xs text-gray-500 px-10 line-clamp-1">{item.body ?? ''}</p>
         </div>
