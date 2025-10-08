@@ -86,7 +86,7 @@
           <p class="w-full text-sm text-gray-600 px-8 mb-2">
             <a href={`/content/note/${String(item.id)}`} class="link">{item.title}</a>
           </p>
-          <p class="w-full text-xs text-gray-500 px-8 line-clamp-2">{item.body ?? ''}</p>
+          <p class="w-full text-xs text-gray-500 px-10 line-clamp-1">{item.body ?? ''}</p>
         </div>
         <hr class="h-0.5 w-9/10 bg-gray-200" />
       {/each}
