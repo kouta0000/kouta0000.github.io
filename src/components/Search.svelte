@@ -12,7 +12,7 @@
     let documents: Doc[] = $state([]);
     let results: (Doc|undefined)[] = $state([]);
     onMount(async()=>{
-        const res = await fetch('/api/search-index');
+        const res = await fetch('/search-index');
         documents = await res.json();
         documents.forEach(doc=>{
             index.add(doc.id,`${doc.title} ${doc.body}`)
