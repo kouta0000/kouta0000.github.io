@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Index } from 'flexsearch';
-    import { getRelativeLocaleUrl } from "astro:i18n";
-    
+    // restoreFocus の import は本番で存在しない場合があるため、使っていないなら一旦コメントアウト推奨
+    // import { restoreFocus } from 'astro/virtual-modules/transitions-swap-functions.js';
   
     interface Doc {
       id: string | number;
@@ -11,18 +11,14 @@
     }
   
     let query = '';
-    let scroll = $state(0);
     let index: Index | null = null;
     let documents: Doc[] = [];
     let results: Doc[] = [];
-    const handleScroll = () => {
-        scroll = window.scrollY;
-    }
+  
     onMount(async () => {
-        
       try {
         const base = import.meta.env.BASE_URL ?? '/';
-        const res = await fetch(`${base}/search-index.json`, {
+        const res = await fetch(`${base}search-index.json`, {
           headers: { 'accept': 'application/json' },
           cache: 'no-store' // CDN/キャッシュの揺れ対策
         });
@@ -44,37 +40,26 @@
       } catch (e) {
         console.error('Search init error:', e);
       }
-      
     });
-    onMount(()=>{
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-        window.removeEventListener('scroll', handleScroll)
-      }
-
-    })
-    
+  
     const handleQuery = () => {
-  setTimeout(() => {
-    if (!index || !query) {
-      results = [];
-      return;
-    }
-    const ids = index.search(query);
-    console.log('Search IDs:', ids);
-    results = ids
-      .map((id: string | number) => {
-        const sid = String(id);
-        return documents.find((d) => String(d.id) === sid);
-      })
-      .filter((d): d is Doc => Boolean(d))
-      .slice(0, 5);
-  }, 0);
-};
-
+      if (!index || !query) {
+        results = [];
+        return;
+      }
+      const ids = index.search(query);
+      // FlexSearch は id の配列を返す。文字列に正規化して比較
+      results = ids
+        .map((id: string | number) => {
+          const sid = String(id);
+          return documents.find((d) => String(d.id) === sid);
+        })
+        .filter((d): d is Doc => Boolean(d))
+        .slice(0, 5);
+    };
   </script>
   
-  <div class="sticky top-10 w-full max-w-md mx-auto relative group mb-5 " >
+  <div class="sticky w-full max-w-md mx-auto relative group">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
@@ -89,8 +74,8 @@
         id="default-search"
         bind:value={query}
         oninput={handleQuery}
-        onfocusout={() => { setTimeout(()=>{results = []; query = ''; },300)}}
-        class="{scroll>10 ? "bg-opacity-80 shadow-md":""} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        onfocusout={() => { results = []; query = ''; }}
+        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
       />
@@ -98,12 +83,11 @@
   
     <div class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
       {#each results as item}
-        <div class="p-2 relative">
-            <a href={getRelativeLocaleUrl('ja', `/note/${item.id.split("/").slice(1).join("/")}`)} class="absolute inset-0 hover:bg-gray-500/10"></a>
+        <div class="p-2">
           <p class="w-full text-sm text-gray-600 px-8 mb-2">
-            {item.title}
+            <a href={`/content/note/${String(item.id)}`} class="link">{item.title}</a>
           </p>
-          <p class="w-full text-xs text-gray-500 px-10 line-clamp-1">{item.body ?? ''}</p>
+          <p class="w-full text-xs text-gray-500 px-8 line-clamp-2">{item.body ?? ''}</p>
         </div>
         <hr class="h-0.5 w-9/10 bg-gray-200" />
       {/each}
