@@ -14,7 +14,10 @@
     let index: Index | null = null;
     let documents: Doc[] = [];
     let results: Doc[] = [];
-  
+    let scroll = $state(0);
+    const handleScroll = () => {
+        scroll = window.scrollY;
+    }
     onMount(async () => {
       try {
         const base = import.meta.env.BASE_URL ?? '/';
@@ -41,7 +44,12 @@
         console.error('Search init error:', e);
       }
     });
-  
+    onMount(()=>{
+        window.addEventListener('scroll',handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    })
     const handleQuery = () => {
       if (!index || !query) {
         results = [];
@@ -75,7 +83,7 @@
         bind:value={query}
         oninput={handleQuery}
         onfocusout={() => { results = []; query = ''; }}
-        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="{scroll>10 ? 'bg-opacity-80 shadow-md':''} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
       />
