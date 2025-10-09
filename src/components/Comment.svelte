@@ -19,7 +19,7 @@
         textarea.style.height = textarea.scrollHeight + 'px';
     }
 </script>
-<div class="px-10">
+<div class="px-4">
     <div class="w-full pb-6 border-b border-gray-300 justify-start items-start gap-2.5 inline-flex">
         <img class="w-10 h-10 rounded-full object-cover p-1" src="/comment.png" alt="James Miller image" />
         <div class="w-full flex-col justify-start items-start gap-3.5 inline-flex">
