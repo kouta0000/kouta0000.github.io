@@ -10,46 +10,53 @@
       body?: string;
     }
   
-    let query = '';
-    let index: Index | null = null;
-    let documents: Doc[] = [];
-    let results: Doc[] = [];
+    let query = $state('');
+    let index: Index | null = $state(null);
+    let documents: Doc[] = $state([]);
     let scroll = $state(0);
+    let results: Doc[] = $state([]);
     const handleScroll = () => {
         scroll = window.scrollY;
     }
+    
     onMount(async () => {
-      try {
-        const base = import.meta.env.BASE_URL ?? '/';
-        const res = await fetch(`${base}search-index.json`, {
-          headers: { 'accept': 'application/json' },
-          cache: 'no-store' // CDN/キャッシュの揺れ対策
-        });
-        if (!res.ok) {
-          console.error('Failed to fetch search-index.json', res.status);
-          return;
-        }
-        documents = await res.json();
-  
-        // クライアントで Index を生成（Worker オフでCSP回避）
-        index = new Index({ tokenize: 'forward', cache: true, worker: false });
-  
-        // 安全に追加（型/undefined対策）
-        for (const doc of documents) {
-          const id = String(doc.id);
-          const text = `${doc.title} ${doc.body ?? ''}`;
-          index.add(id, text);
-        }
-      } catch (e) {
-        console.error('Search init error:', e);
+    // SSR保険
+    if (import.meta.env.SSR) return;
+
+    // ブラウザAPIはここから
+   
+
+    try {
+        const baseRaw = import.meta.env.BASE_URL || '/';
+// strip trailing slashes, then add exactly one
+const base = baseRaw.replace(/\/+$/, '') + '/';
+const url = `${base}search-index.json`;
+      const res = await fetch(url, { headers: { accept: 'application/json' }, cache: 'no-store' });
+      if (!res.ok) {
+        console.error('Failed to fetch search-index.json', res.status);
+        return;
       }
-    });
-    onMount(()=>{
-        window.addEventListener('scroll',handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    })
+      documents = await res.json();
+
+      index = new Index({ tokenize: 'forward', cache: true, worker: false });
+
+      for (const doc of documents) {
+        const id = String(doc.id);
+        const text = `${doc.title ?? ''} ${doc.body ?? ''}`;
+        index.add(id, text);
+      }
+    } catch (e) {
+      console.error('Search init error:', e);
+    }
+
+    
+  });
+  onMount(()=>{
+    window.addEventListener('scroll',handleScroll);
+    return () => {
+        window.removeEventListener('scroll', hancdleScroll)
+    }
+  })
     const handleQuery = () => {
       if (!index || !query) {
         results = [];
@@ -67,7 +74,7 @@
     };
   </script>
   
-  <div class="sticky w-full max-w-md mx-auto relative group">
+  <div class="w-full max-w-md mx-auto relative group sticky top-10 mb-6">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
@@ -83,7 +90,7 @@
         bind:value={query}
         oninput={handleQuery}
         onfocusout={() => { results = []; query = ''; }}
-        class="{scroll>10 ? 'bg-opacity-80 shadow-md':''} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="{scroll>10 ? "bg-opacity-80 shadow-md":""} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
       />
