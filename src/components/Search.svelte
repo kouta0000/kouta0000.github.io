@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Index } from 'flexsearch';
+    import {fade} from 'svelte/transition'
+    import { getRelativeLocaleUrl } from 'astro:i18n';
     // restoreFocus の import は本番で存在しない場合があるため、使っていないなら一旦コメントアウト推奨
     // import { restoreFocus } from 'astro/virtual-modules/transitions-swap-functions.js';
   
@@ -13,11 +15,8 @@
     let query = $state('');
     let index: Index | null = $state(null);
     let documents: Doc[] = $state([]);
-    let scroll = $state(0);
     let results: Doc[] = $state([]);
-    const handleScroll = () => {
-        scroll = window.scrollY;
-    }
+    let show = $state(false);
     
     onMount(async () => {
     // SSR保険
@@ -51,12 +50,6 @@ const url = `${base}search-index.json`;
 
     
   });
-  onMount(()=>{
-    window.addEventListener('scroll',handleScroll);
-    return () => {
-        window.removeEventListener('scroll', hancdleScroll)
-    }
-  })
     const handleQuery = () => {
       if (!index || !query) {
         results = [];
@@ -73,34 +66,44 @@ const url = `${base}search-index.json`;
         .slice(0, 5);
     };
   </script>
-  
-  <div class="w-full max-w-md mx-auto relative group fixed top-10 mb-6">
-    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+ 
+  <button onclick={()=> {show=!show}}>
+    {#if !show}
+    <svg in:fade xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
+    
+  {:else}
+  <svg in:fade xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+  </svg>
+{/if}  
+  </button>
+  {#if show}
+  <div class="w-xs absolute top-[150%] right-0 group mb-6">
+    <label for="default-search" class="mb-2 text-xs font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
     <div class="relative">
-      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-        </svg>
-      </div>
       <input
         type="search"
         id="default-search"
         bind:value={query}
         oninput={handleQuery}
-        onfocusout={() => { results = []; query = ''; }}
-        class="{scroll>10 ? "bg-opacity-80 shadow-md":""} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        onfocusout={() => { setTimeout(()=>{results = []; query = '';show=false},300)}}
+        class="shadow-md rounded-full block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-200/30 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
       />
     </div>
   
     <div class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
-      {#each results as item}
-        <div class="p-2">
-          <p class="w-full text-sm text-gray-600 px-8 mb-2">
-            <a href={`/content/note/${String(item.id)}`} class="link">{item.title}</a>
+      
+        {#each results as item}
+        <div class="p-2 relative">
+            <a href={getRelativeLocaleUrl('ja', `/note/${item.id.split("/").slice(1).join("/")}`)} class="link absolute inset-0"></a>
+          <p class="w-full text-sm text-gray-800 px-8 mb-2">
+            {item.title}
           </p>
           <p class="w-full text-xs text-gray-500 px-8 line-clamp-2">{item.body ?? ''}</p>
         </div>
@@ -108,4 +111,4 @@ const url = `${base}search-index.json`;
       {/each}
     </div>
   </div>
-  
+  {/if}
