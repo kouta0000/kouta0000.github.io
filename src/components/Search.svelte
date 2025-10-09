@@ -55,20 +55,23 @@
     })
     
     const handleQuery = () => {
-      if (!index || !query) {
-        results = [];
-        return;
-      }
-      const ids = index.search(query);
-      // FlexSearch は id の配列を返す。文字列に正規化して比較
-      results = ids
-        .map((id: string | number) => {
-          const sid = String(id);
-          return documents.find((d) => String(d.id) === sid);
-        })
-        .filter((d): d is Doc => Boolean(d))
-        .slice(0, 5);
-    };
+  setTimeout(() => {
+    if (!index || !query) {
+      results = [];
+      return;
+    }
+    const ids = index.search(query);
+    console.log('Search IDs:', ids);
+    results = ids
+      .map((id: string | number) => {
+        const sid = String(id);
+        return documents.find((d) => String(d.id) === sid);
+      })
+      .filter((d): d is Doc => Boolean(d))
+      .slice(0, 5);
+  }, 0);
+};
+
   </script>
   
   <div class="sticky top-10 w-full max-w-md mx-auto relative group mb-5 " >
