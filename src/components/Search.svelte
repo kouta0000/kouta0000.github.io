@@ -59,7 +59,7 @@
     };
   </script>
   
-  <div class="sticky w-full max-w-md mx-auto relative group">
+  <div class="fixed w-full max-w-md mx-auto relative group">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
