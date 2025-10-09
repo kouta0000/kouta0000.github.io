@@ -85,8 +85,8 @@
         type="search"
         id="default-search"
         bind:value={query}
-        on:input={handleQuery}
-        on:focusout={() => { setTimeout(()=>{results = []; query = ''; },300)}}
+        oninput={handleQuery}
+        onfocusout={() => { setTimeout(()=>{results = []; query = ''; },300)}}
         class="{scroll>10 ? "bg-opacity-80 shadow-md":""} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
