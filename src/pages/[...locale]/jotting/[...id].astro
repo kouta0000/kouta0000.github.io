@@ -7,6 +7,7 @@ import Icon from "$components/Icon.astro";
 import Position from "$components/Position.astro";
 import Sensitive from "$components/Sensitive.svelte";
 import i18nit from "$i18n";
+import Comments from '$components/Comments.svelte'
 
 export async function getStaticPaths() {
 	const jottings = await getCollection("jotting", jotting => !jotting.data.draft);
@@ -46,8 +47,10 @@ const t = i18nit(locale);
 
 		<Sensitive {locale} back="/jotting" sensitive={jotting.data.sensitive} client:load>
 			<section id="markdown-content" class="markdown"><Content /></section>
+			
 		</Sensitive>
-
+		<Comments post={jotting} />
 		<Position {locale} />
+		
 	</main>
 </Base>

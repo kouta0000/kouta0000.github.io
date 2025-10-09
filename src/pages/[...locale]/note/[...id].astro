@@ -9,6 +9,7 @@ import TOC from "$components/note/TOC.astro";
 import Position from "$components/Position.astro";
 import Sensitive from "$components/Sensitive.svelte";
 import i18nit from "$i18n";
+import Comments from '$components/Comments.svelte'
 
 export async function getStaticPaths() {
 	// Get all notes excluding drafts
@@ -98,5 +99,6 @@ const t = i18nit(locale);
 		</Sensitive>
 
 		<Position {locale} />
+		<Comments post={note} client:load/>
 	</main>
 </Base>
