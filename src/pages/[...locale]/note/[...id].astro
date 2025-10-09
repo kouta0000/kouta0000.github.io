@@ -54,7 +54,7 @@ const t = i18nit(locale);
 ---
 
 <Base title={note.data.title} {locale} description={note.data.description} article={{ timestamp: note.data.timestamp, section: note.data.series, tags: note.data.tags }}>
-	<main class="flex flex-col gap-6">
+	<main class="flex flex-col gap-6 md:px-30">
 		<header class="flex flex-col gap-4 mb-4">
 			<h1 class="text-3xl">{note.data.title}</h1>
 			<div class="flex flex-col gap-3 sm:flex-row children:(flex items-center gap-1 text-3.5 c-secondary)">
