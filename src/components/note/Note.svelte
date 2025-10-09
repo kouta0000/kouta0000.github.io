@@ -62,12 +62,14 @@
 		}
 	}
 </style>
-<Search />
-<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-10">
+
+<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-10 relative">
+	
 	<article class="flex flex-col gap-4 grow">
+		<Search />
 		{#each list as note (note.id)}
 			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row gap-2" >
-				<div class="flex flex-col gap-2 md:px-30">
+				<div class="flex flex-col gap-2">
 					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300">
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}

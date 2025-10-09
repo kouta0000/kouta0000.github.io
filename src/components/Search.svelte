@@ -11,11 +11,15 @@
     }
   
     let query = '';
+    let scroll = $state(0);
     let index: Index | null = null;
     let documents: Doc[] = [];
     let results: Doc[] = [];
-  
+    const handleScroll = () => {
+        scroll = window.scrollY;
+    }
     onMount(async () => {
+        
       try {
         const base = import.meta.env.BASE_URL ?? '/';
         const res = await fetch(`${base}/search-index.json`, {
@@ -40,8 +44,16 @@
       } catch (e) {
         console.error('Search init error:', e);
       }
+      
     });
-  
+    onMount(()=>{
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+        window.removeEventListener('scroll', handleScroll)
+      }
+
+    })
+    
     const handleQuery = () => {
       if (!index || !query) {
         results = [];
@@ -59,7 +71,7 @@
     };
   </script>
   
-  <div class="fixed w-full max-w-md mx-auto relative group">
+  <div class="sticky top-10 w-full max-w-md mx-auto relative group mb-5 " >
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
@@ -75,7 +87,7 @@
         bind:value={query}
         on:input={handleQuery}
         on:focusout={() => { setTimeout(()=>{results = []; query = ''; },300)}}
-        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        class="{scroll>10 ? "bg-opacity-80 shadow-md":""} block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         placeholder="Search"
         required
       />
