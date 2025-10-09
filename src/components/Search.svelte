@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Index } from 'flexsearch';
-    import {fade} from 'svelte/transition'
+    import {fade, slide} from 'svelte/transition'
     import { getRelativeLocaleUrl } from 'astro:i18n';
     // restoreFocus の import は本番で存在しない場合があるため、使っていないなら一旦コメントアウト推奨
     // import { restoreFocus } from 'astro/virtual-modules/transitions-swap-functions.js';
@@ -80,7 +80,7 @@ const url = `${base}search-index.json`;
 {/if}  
   </button>
   {#if show}
-  <div class="w-xs absolute top-[150%] right-0 group mb-6">
+  <div out:fade={{duration:100}} class="w-xs absolute top-[150%] right-0 group mb-6">
     <label for="default-search" class="mb-2 text-xs font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
@@ -96,11 +96,11 @@ const url = `${base}search-index.json`;
         required
       />
     </div>
-  
-    <div class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
+    {#if results.length > 0}
+    <div transition:slide class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
       
         {#each results as item}
-        <div class="p-2 relative">
+        <div transition:slide class="p-2 relative">
             <a href={getRelativeLocaleUrl('ja', `/note/${item.id.split("/").slice(1).join("/")}`)} class="link absolute inset-0"></a>
           <p class="w-full text-sm text-gray-800 px-8 mb-2">
             {item.title}
@@ -109,6 +109,8 @@ const url = `${base}search-index.json`;
         </div>
         <hr class="h-0.5 w-9/10 bg-gray-200" />
       {/each}
+      
     </div>
+    {/if}
   </div>
   {/if}
