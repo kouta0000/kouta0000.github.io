@@ -6,10 +6,13 @@
   "content": {
     "root": "src/content/note/ja"
   },
-  "code": {
-    "root": ""
-  },
   "themeConfig": [],
-  "arrangement": [],
+  "arrangement": [
+    {
+      "type": "file",
+      "targetPath": "src/content/note/ja/superintro7.md",
+      "groupName": "超入門"
+    }
+  ],
   "showCommitModal": true
 }
