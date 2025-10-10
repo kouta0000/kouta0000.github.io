@@ -68,7 +68,7 @@
 		{#each list as note (note.id)}
 			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row gap-2" >
 				<div class="flex flex-col gap-2">
-					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300">
+					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300 font-bold">
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
