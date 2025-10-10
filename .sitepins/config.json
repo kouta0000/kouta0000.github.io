@@ -6,10 +6,13 @@
   "content": {
     "root": "src/content/note/ja"
   },
-  "code": {
-    "root": ""
-  },
   "themeConfig": [],
-  "arrangement": [],
+  "arrangement": [
+    {
+      "type": "file",
+      "targetPath": "src/content/note/ja/2025-09-24-ガゼンやる気が出た！.md",
+      "groupName": "津軽"
+    }
+  ],
   "showCommitModal": false
 }
