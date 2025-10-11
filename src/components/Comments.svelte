@@ -19,7 +19,9 @@
         textarea.style.height = textarea.scrollHeight + 'px';
     }
 </script>
-
+{#each comments as comment}
+<Comment  comment={comment} post={post} />
+{/each}
 <form transition:slide class="mb-3">
     <label for="chat" class="sr-only">
         Your message
@@ -66,6 +68,3 @@
         </div>
     </div>
 </form>
-{#each comments as comment}
-<Comment  comment={comment} post={post} />
-{/each}
