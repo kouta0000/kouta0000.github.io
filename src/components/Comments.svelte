@@ -121,7 +121,7 @@ const toggleReplying = (commentId: string) => {
             isposting= false;
             return
         } else {
-            comments.unshift({nickname:nickname, content:content, created_at: String(new Date())})
+            await fetchComments();
             isposting = false;
         }
     }
