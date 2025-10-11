@@ -1,9 +1,16 @@
 <script lang='ts'>
-     import {slide} from 'svelte/transition'
-    let {comment,post} = $props(); 
+    import {slide} from 'svelte/transition'
+    import type {SupabaseClient} from '@supabase/supabase-js';
+    interface Props {
+        comment:string;
+        post: any;
+        supabase:SupabaseClient;
+    }
+    let {comment,post, supabase}: Props = $props(); 
     let message = $state('');
     let replying = $state(false);
     let showreplys =$state(false);
+    let isloading = $state(false);
 
     let replys = $state(['',''])
     const handleReply = () => {
@@ -17,6 +24,31 @@
         if(!textarea) return;
         textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
+    }
+    const postComment = async (e:Event) => {
+        isloading = true;
+        const form = e.target as HTMLFormElement | null;
+        if(!form) {
+            alert("送信失敗");
+            isloading = false;
+            return
+        }
+        const formData = new FormData(form);
+        const nickname = formData.get("nickname")
+        const content = formData.get("content")
+        const data = {
+            content: content,
+            nickname: nickname
+        }
+        const res = await supabase.from("comments").insert(data);
+        if(res.error) {
+            alert("通信エラー");
+            isloading = false;
+            return
+        } else {
+            isloading = false;
+            commen
+        }
     }
 </script>
 <div class="px-4">
