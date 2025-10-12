@@ -1,5 +1,5 @@
 ---
-timestamp: '2025-10-10T12:00:00.000Z'
+timestamp: 2025-10-10T12:00:00.000Z
 title: 2025年10月11日
 description: 日記
 tags:
