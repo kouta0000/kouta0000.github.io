@@ -10,7 +10,7 @@ const note = defineCollection({
 	loader: glob({ pattern: ["**/*.md", "!**/_*.md", "!**/_*/*.md"], base: "./src/content/note" }),
 	schema: z.object({
 		title: z.string(),								// Post title (required)
-		timestamp: z.date(),							// Publication date (required)
+		timestamp: z.union([z.date(), z.string()]).transform((val) => typeof val === "string" ? new Date(val) : val),							// Publication date (required)
 		series: z.string().optional(),					// Series name for grouped posts
 		tags: z.array(z.string()).optional(),			// Array of topic tags
 		description: z.string().optional(),				// Post description/excerpt
