@@ -111,7 +111,7 @@ const toggleReplying = (commentId: string) => {
         const nickname = String(formData.get("nickname") ?? '')
         const content = String(formData.get("content") ?? ''); 
         const data = {
-            post_id: post id,
+            post_id: post.id,
             content: content,
             nickname: nickname,
         }
