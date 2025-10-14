@@ -9,6 +9,7 @@
       "label": "Title",
       "type": "string",
       "value": "",
+      "isRequired": false,
       "defaultValue": ""
     },
     {
@@ -25,13 +26,6 @@
       "value": "",
       "defaultValue": "",
       "alwaysUseCurrentDate": false
-    },
-    {
-      "name": "description",
-      "label": "Description",
-      "type": "string",
-      "value": "",
-      "defaultValue": ""
     }
   ]
 }
