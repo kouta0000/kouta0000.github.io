@@ -56,7 +56,7 @@ const toggleReplying = (commentId: string) => {
     isloading = true;
     comments = []; // 最初に空にしておく（重要）
 
-    const commentRes = await supabase.from("comments").select('*').order('created_at',{ascending:false});
+    const commentRes = await supabase.from("comments").select('*').eq("post_id", post.id).order('created_at',{ascending:false});
     if (commentRes.error) {
         alert("コメント取得失敗");
         console.error(commentRes.error.message);
@@ -111,7 +111,7 @@ const toggleReplying = (commentId: string) => {
         const nickname = String(formData.get("nickname") ?? '')
         const content = String(formData.get("content") ?? ''); 
         const data = {
-            post_id: post_id,
+            post_id: post id,
             content: content,
             nickname: nickname,
         }
