@@ -89,7 +89,7 @@
 					</blockquote>
 					{/if}
 					<div class=" my-4 py-2">
-						<div class="line-clamp-2 ">
+						<div class="line-clamp-4 ">
 						{jotting.body}
 						</div>
 					</div>

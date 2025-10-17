@@ -68,21 +68,21 @@
 		{#each list as note (note.id)}
 			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row gap-2" >
 				<div class="flex flex-col gap-2">
-					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300 font-bold">
+					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300 ">
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
 						<a href={getRelativeLocaleUrl(locale, `/note/${note.id.split("/").slice(1).join("/")}`)} class="link">
-							<time title={Time.full(note.data.timestamp)} class="font-mono text-xl c-remark">{Time(note.data.timestamp)}</time>
+							<time title={Time.full(note.data.timestamp)} class="font-mono text-xl ">{Time(note.data.timestamp)}</time>
 						</a>
 						
 					</div>
-					<p class="font-mono c-remark text-xs">{note.data.title}</p>
+					<p class="font-mono c-remark">{note.data.title}</p>
 				</div>
 				
 				<span class="flex items-center gap-1 sm:ml-a c-remark">
 					{#each note.data.tags as tag}
-						<button onclick={() => switch_tag(tag, true)} class="text-3.5 sm:text-sm">#{tag}</button>
+						<button onclick={() => switch_tag(tag, true)} class="text-2.5 sm:text-sm">#{tag}</button>
 					{/each}
 				</span>
 			</section>
