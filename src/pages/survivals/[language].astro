@@ -1,0 +1,47 @@
+---
+import type { GetStaticPaths } from "astro";
+import Base from "$layouts/Base.astro";
+import Card from "./Card.svelte";
+import data from "./survival.json";
+export const getStaticPaths = (() => {
+    const languages = ['en','fr','ge']
+    return languages.map(language=>({
+        params: {language},
+        props: {language}
+    }));
+}) satisfies GetStaticPaths;
+const {language} = Astro.params;
+let phrases;
+switch (language) {
+    case 'en':
+        phrases = data.en;
+        break;
+    case 'fr':
+        phrases = data.fr;
+        break;
+    case 'ge':
+        phrases = data.ge;
+        break
+}
+---
+
+<Base title="">
+	<main class="mt-20">
+        { language === 'en' && (
+            phrases.map((phrase)=>(
+                <Card japanese={phrase.japanese} target={phrase.english} client:load/>
+                )))
+        }
+        { language === 'fr' && (
+            phrases.tu.map((phrase)=>(
+                <Card japanese={phrase.japanese} target={phrase.french} client:load/>
+                )))
+        }
+        { language === 'ge' && (
+            phrases.du.map((phrase)=>(
+                <Card japanese={phrase.japanese} target={phrase.german} client:load/>
+                )))
+        }
+        
+	</main>
+</Base>

@@ -114,11 +114,11 @@
 
 <!-- svelte-ignore a11y_interactive_supports_focus -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
-<div role="button" onclick={() => (menu = false)} class:pointer-events-none={!menu} class:bg-transparent={!menu} class="fixed top-0 left-0 w-screen h-screen pointer-events-auto bg-#aaaaaa88 transition-background-color sm:hidden"></div>
+<div role="button" onclick={() => (menu = false)} class:pointer-events-none={!menu} class:bg-transparent={!menu} class="fixed top-0 left-0 w-screen h-screen pointer-events-auto bg-#aaaaaa88 transition-background-color"></div>
 
-<nav bind:this={navigator} class:transform-translate-x-full={!menu} class="fixed top-0 right-0 flex flex-col justify-between items-start gap-5 p-5 bg-background h-full sm:contents overflow-hidden transition-transform">
-	<header class="grid gap-5 c-secondary grid-rows-[repeat(5,1fr)] sm:(grid-rows-none grid-cols-[repeat(4,1fr)])">
-		<button onclick={() => (menu = false)} class="sm:hidden">{@render close()}</button>
+<nav bind:this={navigator} class:transform-translate-x-full={!menu} class="fixed top-0 right-0 flex flex-col justify-between items-start gap-5 p-5 bg-background h-full overflow-hidden transition-transform">
+	<header class="grid gap-5 c-secondary grid-rows-[repeat(5,1fr)]">
+		<button onclick={() => (menu = false)} class="">{@render close()}</button>
 
 		<a href={getRelativeLocaleUrl(locale)} class:location={route == getRelativeLocaleUrl(locale) || route.startsWith(getRelativeLocaleUrl(locale, "/preface"))}>
 			<span>{@render home()}</span>
@@ -136,6 +136,10 @@
 			<span>{@render about()}</span>
 			<p>{t("navigation.about")}</p>
 		</a>
+		<a href={"/language_room"} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/about"))}>
+			<span>{@render about()}</span>
+			<p>{t("navigation.language_room")}</p>
+		</a>
 	</header>
 
 	<footer class="flex flex-col gap-2 sm:gap-5 sm:(flex-row gap-7)">
@@ -146,7 +150,7 @@
 	</footer>
 </nav>
 
-<button onclick={() => (menu = true)} class="sm:hidden">{@render bars()}</button>
+<button onclick={() => (menu = true)} class="">{@render bars()}</button>
 
 <script lang="ts">
 	import { i18n } from "astro:config/client";
