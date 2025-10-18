@@ -14,7 +14,7 @@
         <div class="absolute inset-0 flex items-center justify-center p-10 border-l-solid border-r-solid border-20 border-gray-600 dark-border-gray-100 transition-transform duration-500 ease-in-out {isfocused? "translate-x-full": "translate-x-0"}">
             <div class="tracking-wider">{japanese}</div>
         </div>
-        <div class="absolute inset-0 bg-blur-lg bg-white flex items-center justify-center px-8 transition-transform duration-500 ease-in-out border-l-solid border-r-solid border-20 border-gray-600 dark-border-gray-100 {isfocused? "translate-x-0": "-translate-x-full"}">
+        <div class="text-lg absolute inset-0 flex items-center justify-center px-8 transition-transform duration-500 ease-in-out border-l-solid border-r-solid border-20 text-teal-950 dark:text-white border-teal-800 dark:border-teal-100 {isfocused? "translate-x-0": "-translate-x-full"}">
             <p class="tracking-wider">{target}</p>
         </div>
     </div>
