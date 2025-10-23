@@ -4,15 +4,12 @@
     "public": "public"
   },
   "content": {
-    "root": "src/content/note/ja"
+    "root": "src/content/jotting/ja"
+  },
+  "code": {
+    "root": ""
   },
   "themeConfig": [],
-  "arrangement": [
-    {
-      "type": "file",
-      "targetPath": "src/content/note/ja/superintro7.md",
-      "groupName": "超入門"
-    }
-  ],
+  "arrangement": [],
   "showCommitModal": true
 }
