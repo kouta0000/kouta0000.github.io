@@ -1,0 +1,44 @@
+{
+  "file": "src/content/jotting/ja/first.md",
+  "name": "ja",
+  "fileType": "md",
+  "fmType": "yaml",
+  "template": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "string",
+      "value": "",
+      "defaultValue": ""
+    },
+    {
+      "name": "author",
+      "label": "Author",
+      "type": "string",
+      "value": "",
+      "defaultValue": ""
+    },
+    {
+      "name": "tags",
+      "label": "Tags",
+      "type": "Array",
+      "value": [],
+      "defaultValue": ""
+    },
+    {
+      "name": "timestamp",
+      "label": "Timestamp",
+      "type": "Date",
+      "value": "",
+      "defaultValue": "",
+      "alwaysUseCurrentDate": false
+    },
+    {
+      "name": "citation",
+      "label": "Citation",
+      "type": "string",
+      "value": "",
+      "defaultValue": ""
+    }
+  ]
+}
