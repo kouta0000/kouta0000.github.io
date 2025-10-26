@@ -78,7 +78,7 @@
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
 						!-->
-						<h2 class="text-base font-ja tracking-wide mb-0.5">{note.data.title}</h2>
+						<h2 class="text-sm sm:text-base font-ja tracking-wide mb-0.5">{note.data.title}</h2>
 					</div>
 					
 					
