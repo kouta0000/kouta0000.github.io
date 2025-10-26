@@ -82,7 +82,7 @@ const url = `${base}search-index.json`;
   </button>
   !-->
  
-  <aside out:fade={{duration:100}} class="group mt-2 relative mb-2">
+  <aside out:fade={{duration:100}} class="group mt-2 relative mb-2 z-20">
     <label for="default-search" class="mb-2 text-xs font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>

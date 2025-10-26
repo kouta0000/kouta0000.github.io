@@ -68,22 +68,24 @@
 		{#each list as note, i (note.id)}
 			<a href={getRelativeLocaleUrl(locale, `/note/${note.id.split("/").slice(1).join("/")}`)} 
 			animate:flip={{ duration: 150 }} 
-			class="block relative even:bg-gray-100 odd:bg-gray-50 first:bg-indigo-50 hover:bg-gray-200 transition-all duration-200 p-5 group"
+			class="block relative even:bg-gray-100 odd:bg-gray-50 first:bg-amber-100/70 hover:shadow-lg hover:-translate-x-1 hover:-translate-y-1 hover:translate-z-2 transition-all duration-200 p-5 pt-8 group"
 			>
-				<div></div>
 				<div class="flex items-center justify-between pl-2">
-					<div class="flex gap-3 items-center">
+					<div class="flex gap-5 items-center">
 						<span class="text-xl text-gray-300 font-digital">{String(i+1).padStart(2, '0')}</span>
+						<!--
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
-						
-						<h2 class="text-lg font-ja tracking-wide">{note.data.title}</h2>
+						!-->
+						<h2 class="text-lg font-ja tracking-wide mb-0.5">{note.data.title}</h2>
 					</div>
 					
 					
 				</div>
-				
+				<p class="text-end text-gray-500 text-xs mt-1">
+				<time>{Time(note.data.timestamp)}</time>
+				</p>
 				<span class="flex items-center justify-end gap-1 sm:ml-a c-remark">
 					{#each note.data.tags as tag}
 						<button onclick={() => switch_tag(tag, true)} class="text-2.5 sm:text-sm">#{tag}</button>

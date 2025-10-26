@@ -38,9 +38,9 @@ const title = config.title;
 		<Icon name="lucide:circle-x" slot="error" is:inline />
 		<Icon name="lucide:x" slot="x" is:inline />
 	</Tip>
-	<div class="flex flex-col mx-a px-3 w-[min(100%,1000px)]">
+	<div class="flex flex-col mx-a px-3 w-[min(100%,900px)]">
 		<div id="body" class="flex flex-col min-h-screen px-2 sm:text-lg md:text-xl">
-			<header class="sticky top-0 flex items-center justify-between pt-3 pb-1 mb-10 bg-background z-2 sm:(static pb-12)">
+			<header class="sticky top-0 flex items-center justify-between py-1.5 mb-10 bg-background z-2 sm:(static pb-12)">
 				<a href={getRelativeLocaleUrl(locale)} class="text-size-xl sm:text-size-2xl font-bold font-mono">{title}</a>
 				<div class="flex gap-2 items-center">
 					
@@ -54,7 +54,7 @@ const title = config.title;
 					<Icon name="lucide:rss" slot="rss" />
 					<Icon name="lucide:sun" slot="sun" />
 					<Icon name="lucide:moon" slot="moon" />
-					<Icon name="lucide:align-justify" slot="bars" />
+					<Icon name="lucide:align-justify" slot="bars" class="size-6" />
 					<Icon name="lucide:x" slot="close" is:inline />
 					<Icon name="mdi:earth" slot="language_room" />
 				</Navigator>

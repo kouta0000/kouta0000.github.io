@@ -151,7 +151,11 @@
 	</footer>
 </nav>
 
-<button onclick={() => (menu = true)} class="">{@render bars()}</button>
+<button onclick={() => (menu = true)} class="bg-gray-200 p-1 rounded-3xl hover:bg-gray-400 transition-all duration-200">
+	<div class="px-2.5 py-1 bg-white rounded-3xl transition-all duration-200 flex items-center justify-center hover:scale-110">
+		{@render bars()}
+	</div>
+</button>
 
 <script lang="ts">
 	import { i18n } from "astro:config/client";

@@ -25,7 +25,7 @@ function datetime(time?: Date | number, timezone: string = Time.default_timezone
  * @returns Formatted date-time string in "yyyy/MM/dd-HH:mm:ss" format
  */
 function Time(time?: Date | number, timezone: string = Time.default_timezone): string {
-	return datetime(time, timezone).toFormat("yyyy/MM/dd-HH:mm");
+	return datetime(time, timezone).toFormat("yyyy年MM月dd日");
 }
 
 // Time namespace containing various date/time formatting and manipulation utilities
