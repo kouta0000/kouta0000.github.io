@@ -1,5 +1,5 @@
 {
-  "file": "src/content/jotting/ja/first.md",
+  "file": "src/content/note/ja/読書記わかったつもり読解力がつかない本当の原因.md",
   "name": "ja",
   "fileType": "md",
   "fmType": "yaml",
@@ -7,13 +7,6 @@
     {
       "name": "title",
       "label": "Title",
-      "type": "string",
-      "value": "",
-      "defaultValue": ""
-    },
-    {
-      "name": "author",
-      "label": "Author",
       "type": "string",
       "value": "",
       "defaultValue": ""
@@ -34,8 +27,8 @@
       "alwaysUseCurrentDate": false
     },
     {
-      "name": "citation",
-      "label": "Citation",
+      "name": "description",
+      "label": "Description",
       "type": "string",
       "value": "",
       "defaultValue": ""
