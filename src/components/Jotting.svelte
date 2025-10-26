@@ -84,11 +84,11 @@
 				</header>
 				<section class="px-6 py-4">
 					{#if jotting.data.citation}
-					<blockquote class="text-sm sm:text-base border-l-solid border-2 border-black bg-white pl-4 pt-2 my-4 pb-2 italic">
+					<blockquote class="border-l-solid border-2 border-black bg-white pl-4 pt-2 my-4 pb-2 italic">
 						{jotting.data.citation +"\n"}
 					</blockquote>
 					{/if}
-					<div class="text-xs sm:text-sm my-4 py-2 ">
+					<div class="text-sm  my-4 py-2 ">
 						<div class="line-clamp-4 ">
 						{jotting.body}
 						</div>

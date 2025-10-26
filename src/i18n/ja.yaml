@@ -21,19 +21,19 @@ home:
 jotting:
   tag: タグ
 navigation:
-  about: à propos
-  home: accueil
-  jotting: lecture
-  note: journaux
-  policy: policy
-  preface: preface
+  about: サイトについて
+  home: ホーム
+  jotting: 読書記
+  note: 日記
+  policy: プライバシーポリシー
+  preface: 序文
   language_room: 言語学習室
   subscription: 登録
 note:
-  contents: table de matières
-  series: séries
-  tag: tags
-  top: haut de page
+  contents: 目次
+  series: シリーズ
+  tag: タグ
+  top: 上へ
 read:
   words: '{words} 字'
 sensitive:

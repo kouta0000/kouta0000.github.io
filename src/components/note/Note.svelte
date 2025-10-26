@@ -68,7 +68,7 @@
 		{#each list as note, i (note.id)}
 			<a href={getRelativeLocaleUrl(locale, `/note/${note.id.split("/").slice(1).join("/")}`)} 
 			animate:flip={{ duration: 150 }} 
-			class="block relative bg-gray-100 border-t-solid border-gray-200 first:border-t-2 first:bg-indigo-50 hover:bg-gray-200 transition-all duration-200 p-5 group"
+			class="block relative even:bg-gray-100 odd:bg-gray-50 first:bg-indigo-50 hover:bg-gray-200 transition-all duration-200 p-5 group"
 			>
 				<div></div>
 				<div class="flex items-center justify-between pl-2">
