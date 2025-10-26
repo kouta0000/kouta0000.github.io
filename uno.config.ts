@@ -33,6 +33,7 @@ export default defineConfig({
 			mono: ["Maple Mono NF CN", "monospace"],
 			cursive: ["Zen Kurenaido", "The Peak Font Plus", "serif"],
 			pixel: ["DotGothic16"],
+			digital:["Sixtyfour"]
 		},
 		animation: {
 			keyframes: {

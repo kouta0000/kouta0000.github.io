@@ -119,25 +119,26 @@
 <nav bind:this={navigator} class:transform-translate-x-full={!menu} class="fixed top-0 right-0 flex flex-col justify-between items-start gap-5 p-5 bg-background h-full overflow-hidden transition-transform">
 	<header class="grid gap-5 c-secondary grid-rows-[repeat(5,1fr)]">
 		<button onclick={() => (menu = false)} class="">{@render close()}</button>
+		<Search />
 
-		<a href={getRelativeLocaleUrl(locale)} class:location={route == getRelativeLocaleUrl(locale) || route.startsWith(getRelativeLocaleUrl(locale, "/preface"))}>
+		<a class="flex items-center" href={getRelativeLocaleUrl(locale)} class:location={route == getRelativeLocaleUrl(locale) || route.startsWith(getRelativeLocaleUrl(locale, "/preface"))}>
 			<span>{@render home()}</span>
 			<p>{t("navigation.home")}</p>
 		</a>
-		<a href={getRelativeLocaleUrl(locale, "/note")} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/note"))}>
+		<a class="flex items-center" href={getRelativeLocaleUrl(locale, "/note")} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/note"))}>
 			<span>{@render note()}</span>
 			<p>{t("navigation.note")}</p>
 		</a>
-		<a href={getRelativeLocaleUrl(locale, "/jotting")} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/jotting"))}>
+		<a class="flex items-center" href={getRelativeLocaleUrl(locale, "/jotting")} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/jotting"))}>
 			<span>{@render jotting()}</span>
 			<p>{t("navigation.jotting")}</p>
 		</a>
-		<a href={getRelativeLocaleUrl(locale, "/about")} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/about"))}>
+		<a class="flex items-center" href={getRelativeLocaleUrl(locale, "/about")} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/about"))}>
 			<span>{@render about()}</span>
 			<p>{t("navigation.about")}</p>
 		</a>
-		<a href={"/language_room"} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/about"))}>
-			<span>{@render about()}</span>
+		<a class="flex items-center" href={"/language_room"} class:location={route.startsWith(getRelativeLocaleUrl(locale, "/about"))}>
+			<span>{@render language_room()}</span>
 			<p>{t("navigation.language_room")}</p>
 		</a>
 	</header>
@@ -159,8 +160,9 @@
 	import i18nit from "$i18n";
 	import ThemeSwitcher from "./ThemeSwitcher.svelte";
 	import Menu from "./Menu.svelte";
+	import Search from "$components/Search.svelte";
 
-	let { locale, route, home, note, jotting, about, globe, rss, sun, moon, bars, close }: { locale: string; route: string } & { [key: string]: Snippet } = $props();
+	let { locale, route, home, note, jotting, about, globe, rss, sun, moon, bars, close, language_room }: { locale: string; route: string } & { [key: string]: Snippet } = $props();
 
 	const t = i18nit(locale);
 

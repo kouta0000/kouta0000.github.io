@@ -63,29 +63,33 @@
 	}
 </style>
 
-<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-10 relative">
-	<article class="flex flex-col gap-4 grow">
-		{#each list as note (note.id)}
-			<section animate:flip={{ duration: 150 }} class="flex flex-col sm:flex-row gap-2" >
-				<div class="flex flex-col gap-2">
-					<div class="flex gap-1 items-center border-l-solid border-6 pl-4 md:pl-8 border-gray-300 ">
+<main class="flex flex-col-reverse sm:flex-row gap-10 grow mt-10 relative font-mono">
+	<article class="flex flex-col gap-4 max-w-4xl mx-auto">
+		{#each list as note, i (note.id)}
+			<a href={getRelativeLocaleUrl(locale, `/note/${note.id.split("/").slice(1).join("/")}`)} 
+			animate:flip={{ duration: 150 }} 
+			class="block relative bg-gray-100 border-t-solid border-gray-200 first:border-t-2 first:bg-indigo-50 hover:bg-gray-200 transition-all duration-200 p-5 group"
+			>
+				<div></div>
+				<div class="flex items-center justify-between pl-2">
+					<div class="flex gap-3 items-center">
+						<span class="text-xl text-gray-300 font-digital">{String(i+1).padStart(2, '0')}</span>
 						{#if note.data.top > 0}<span>{@render top()}</span>{/if}
 						{#if note.data.sensitive}<span>{@render sensitive()}</span>{/if}
 						{#if note.data.series}<button onclick={() => choose_series(note.data.series, true)}>{note.data.series}</button><b>|</b>{/if}
-						<a href={getRelativeLocaleUrl(locale, `/note/${note.id.split("/").slice(1).join("/")}`)} class="link">
-							<time title={Time.full(note.data.timestamp)} class="font-mono text-xl ">{Time(note.data.timestamp)}</time>
-						</a>
 						
+						<h2 class="text-lg font-ja tracking-wide">{note.data.title}</h2>
 					</div>
-					<p class="font-mono c-remark">{note.data.title}</p>
+					
+					
 				</div>
 				
-				<span class="flex items-center gap-1 sm:ml-a c-remark">
+				<span class="flex items-center justify-end gap-1 sm:ml-a c-remark">
 					{#each note.data.tags as tag}
 						<button onclick={() => switch_tag(tag, true)} class="text-2.5 sm:text-sm">#{tag}</button>
 					{/each}
 				</span>
-			</section>
+			</a>
 		{/each}
 
 		{#if pages > 1}

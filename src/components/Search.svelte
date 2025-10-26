@@ -67,7 +67,7 @@ const url = `${base}search-index.json`;
         .slice(0, 5);
     };
   </script>
- 
+ <!---
   <button onclick={()=> {show=!show}} class="sm:hidden">
     {#if !show}
     <svg in:fade xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -80,43 +80,9 @@ const url = `${base}search-index.json`;
   </svg>
 {/if}  
   </button>
-  {#if show}
-  <div out:fade={{duration:100}} class="w-xs absolute top-[150%] right-0 group mb-6 sm:hidden">
-    <label for="default-search" class="mb-2 text-xs font-medium text-gray-900 sr-only dark:text-white">
-      Search
-    </label>
-    <div class="relative">
-      <input
-        type="search"
-        id="default-search"
-        bind:value={query}
-        oninput={()=>handleQuery(query)}
-        onfocusout={() => { setTimeout(()=>{results = []; query = '';show=false},300)}}
-        class="shadow-md rounded-xl block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="Search"
-        required
-      />
-    </div>
-    {#if results.length > 0}
-    <div transition:slide class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
-      
-        {#each results as item}
-        <div transition:slide class="p-2 relative">
-            <a href={getRelativeLocaleUrl('ja', `/note/${item.id.split("/").slice(1).join("/")}`)} class="link absolute inset-0"></a>
-          <p class="w-full text-sm text-gray-800 px-8 mb-2">
-            {item.title}
-          </p>
-          <p class="w-full text-xs text-gray-500 px-8 line-clamp-2">{item.body ?? ''}</p>
-        </div>
-        <hr class="h-0.5 w-9/10 bg-gray-200" />
-      {/each}
-      
-    </div>
-    {/if}
-  </div>
-  {/if}
-
-  <aside out:fade={{duration:100}} class="hidden sm:block group mt-2 relative">
+  !-->
+ 
+  <aside out:fade={{duration:100}} class="group mt-2 relative">
     <label for="default-search" class="mb-2 text-xs font-medium text-gray-900 sr-only dark:text-white">
       Search
     </label>
@@ -133,7 +99,7 @@ const url = `${base}search-index.json`;
       />
     </div>
     {#if results.length > 0}
-    <div transition:slide class="shadow-lg rounded-b-xl w-[150%] absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
+    <div transition:slide class="shadow-lg rounded-b-xl w-full absolute top-[100%] inset-x-0 transition-all duration-500 flex flex-col items-center devided bg-white dark:bg-gray-800">
       
         {#each results as item}
         <div transition:slide class="p-2 relative">

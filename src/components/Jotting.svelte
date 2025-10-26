@@ -67,33 +67,35 @@
 	<article class="flex flex-col grow">
 		<header class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
 			{#each list as jotting (jotting.id)}
-			<div class="w-4/5 mx-auto bg-white text-black border-solid border-4 border-gray-700 overflow-hidden font-pixel shadow-none">
-				<div class="p-3 border-b-solid border-black border-2 bg-gray-100">
+			<div class="w-4/5 mx-auto bg-white text-black border-solid border-4 border-gray-400 overflow-hidden font-mono shadow-none flex flex-col justify-between">
+				<header class="p-3 border-b-solid border-gray-400 border-2 bg-gray-100">
 					<p class="text-xs tracking-widest text-black">
 						{ jotting.data.timestamp.getFullYear()}-{jotting.data.timestamp.getMonth()}-{jotting.data.timestamp.getDate()}
 					</p>
-					<h3 class="text-2xl mt-2 leading-snug">
+					<h3 class="text-xl mt-2 leading-snug">
 						<span class="flex items-center gap-1">
 							{#if jotting.data.sensitive}<span>{@render sensitive()}</span>{/if}
 							<a href={getRelativeLocaleUrl(locale, `/jotting/${jotting.id.split("/").slice(1).join("/")}`)} class="c-primary font-medium link">{jotting.data.title}</a>
 						</span>
 					</h3>
-					<p class="text-base mt-3 border-t-dashed border-2 border-gray-500 pt-1 pl-6">
+					<p class="text-base text-sm sm:text-base mt-3 border-t-dashed border-2 border-gray-500 pt-1 pl-6">
 						{jotting.data.author}
 					</p>
-				</div>
-				<div class="p-3">
+				</header>
+				<section class="px-6 py-4">
 					{#if jotting.data.citation}
-					<blockquote class=" border-l-solid border-2 border-black bg-white pl-2 pt-2 my-4 pb-2 italic">
+					<blockquote class="text-sm sm:text-base border-l-solid border-2 border-black bg-white pl-4 pt-2 my-4 pb-2 italic">
 						{jotting.data.citation +"\n"}
 					</blockquote>
 					{/if}
-					<div class=" my-4 py-2">
+					<div class="text-xs sm:text-sm my-4 py-2 ">
 						<div class="line-clamp-4 ">
 						{jotting.body}
 						</div>
 					</div>
 					
+				</section>
+				<footer class="w-full px-6 py-4">
 					<div class="flex justify-end text-gray-500 hover:text-gray-700">
 						<a href={getRelativeLocaleUrl(locale, `/jotting/${jotting.id.split("/").slice(1).join("/")}`)} class="c-primary font-medium link">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -101,12 +103,12 @@
 						  </svg>
 						</a>
 					</div>
-					<span class="flex gap-1">
+					<div class="flex gap-5 w-full">
 						{#each jotting.data.tags as tag}
-							<button onclick={() => switch_tag(tag, true)} class="text-3.3 c-remark">#{tag}</button>
+							<button onclick={() => switch_tag(tag, true)} class="text-3.3 c-remark whitespace-nowrap">#{tag}</button>
 						{/each}
-					</span>
-				</div>
+					</div>
+				</footer>
 			</div>			
 			{/each}
 		</header>

@@ -31,7 +31,7 @@ const jotting = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		author: z.string(),								// Jotting title (required)
-		timestamp: z.date(),							// Publication date (required)
+		timestamp: z.union([z.date(), z.string()]).transform((val) => typeof val === "string" ? new Date(val) : val),							// Publication date (required)
 		tags: z.array(z.string()).optional(),			// Array of topic tags
 		citation: z.string().optional(),				// Brief description
 		sensitive: z.boolean().default(false),			// Marks content as sensitive

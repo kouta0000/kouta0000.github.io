@@ -2,7 +2,7 @@
 title: Journal francais brouillon
 author: ''
 tags: []
-timestamp: ''
+timestamp: 2025-10-26T13:19:00.000Z
 citation: ''
 ---
 Je vais écrire le journal de quand ? 
