@@ -1,14 +1,15 @@
 ---
 title: Journal francais brouillon
 author: ''
-tags: []
+tags:
+  - 日記
 timestamp: ''
 citation: ''
 ---
-Je vais écrire le journal de quand ? 
+Je vais écrire le journal de quand ?
 
 J'ai fait quoi cette semaine. Ok, mardi
 
 Mardi 21 octobre
 
-J'avais prévu d'aller recevoir mon salaire aprês mes cours. C'est un peu démodé à cette époque actuelle, mais je reçois mon salaire à la main en personne. Je m'inscris à une entreprise d'intérim et peux assez librement choisir quand je travaille. Vu cet emploi du temps de travail irrégulier, les employés peuvent toucher une somme correspondant à la quantité de leur travail jusque là,  chaque mardi ou mercredi. 
+J'avais prévu d'aller recevoir mon salaire aprês mes cours. C'est un peu démodé à cette époque actuelle, mais je reçois mon salaire à la main en personne. Je m'inscris à une entreprise d'intérim et peux assez librement choisir quand je travaille. Vu cet emploi du temps de travail irrégulier, les employés peuvent toucher une somme correspondant à la quantité de leur travail jusque là,  chaque mardi ou mercredi.
