@@ -4,7 +4,7 @@
     "public": "public"
   },
   "content": {
-    "root": "src/content/note/ja"
+    "root": "src/content/jotting/ja"
   },
   "code": {
     "root": ""
