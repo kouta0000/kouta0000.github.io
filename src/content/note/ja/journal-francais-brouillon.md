@@ -13,7 +13,7 @@ J'avais prévu d'aller recevoir mon salaire aprês mes cours. C'est un peu démo
 
 Mercredi 22 octobre
 
-J'ai bossé pour mon mémoire. En plus de ça, j'ai un petit projet de donner un cours de français pour les personnes âgées dans un café-espace communautaire avec une pote à moi et on a parlé un petit peu de ce projet. Je m'inquiète que cela ne se passe bien mais il faut essayer.  
+J'ai bossé pour mon mémoire. En plus de ça, j'ai un petit projet de donner un cours de français pour les personnes âgées dans un café-espace ingcommunautaire avec une pote à moi et on a parlé un petit peu de ce projet. Je m'inquiète que cela ne se passe bien mais il faut essayer.  
 
 Jeudi 23 octobre
 
@@ -21,6 +21,4 @@ J'ai bossé pour mon mémoire.
 
 Samedi 25 octobre
 
-J'ai travaillé dans l'entrepôt d'Amazone comme d'hab. Il a plu toute la journée et il a fait très froid, autant froid qu'il n'y a pas de clim dans l'entrepôt. De retour, j'ai marché jusqu'à la station en discutant avec un homme presque quadragénaire que j'ai synpathisé dans ce travail.
-
-Dimanche 26 octobre
+J'ai travaillé dans l'entrepôt d'Amazone comme d'hab. Il a plu toute la journée et il a fait très froid, autant froid qu'il n'y a pas de clim dans l'entrepôt. De retour, j'ai marché jusqu'à la station en discutant avec un homme avec qui j'ai synpathisé dans ce travail. Il est preque quadragénaire et travaille d'ordinaire comme ingénieur en conception mécanique. Il paraît qu'il vient de faire une reconversion profetionnelle récemment. Je croyais au début qu'il a commencé à travailler dans l'entrepôt car il est en train de chercher une nouvelle entreprise mais en réalité c'est simplement parce qu'il a du temps le week-end d'après ce qu'il a dit. Il m'a demandé tout d'un coup : « Tu vas genre à Disney ? » J'ai répondu : « Oui, déjà 2 ou 3 fois. » « En fait j'y suis allé littéralement mille fois. » Alors, il est un grand fan de Disney. Non, ce n'était pas ça. Il se chargeait environ 10 ans des attractions de Disney dans l'entreprise dont il était employé avant. Je n'avais jamais imaginé comment les attractions de Disney sont consruites, il m'intéressait ce qu'il a fait précisément, et je lui ai demandé. Les attractions ont en générale des rails et ces rails nécessitent un mécanisme électrique. Il dessinait des plans des appareils concernant ce mécanisme. Il arrivait souvent des problèmes en phase de test, donc il paraît qu'il est allé à Disney mille fois sans exagération.
