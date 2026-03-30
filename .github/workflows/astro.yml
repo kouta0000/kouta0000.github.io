@@ -59,9 +59,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: ${{ env.BUILD_PATH }}/${{ steps.detect-package-manager.outputs.lockfile }}
+          node-version: "24" # On en profite pour passer à la version 24 comme suggéré par GitHub
+          # On supprime les lignes "cache" et "cache-dependency-path" qui posent problème
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
