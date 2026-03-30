@@ -13,8 +13,9 @@ import { SITE } from "./src/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE.website,
-  base: '/myblog',
+  site: "https://kouta0000.github.io", // サブディレクトリを含めないドメインのみ
+  base: "/myblog",                   // ここでサブディレクトリを定義
+  trailingSlash: "always",  
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
