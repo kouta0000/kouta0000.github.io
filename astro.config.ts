@@ -13,8 +13,8 @@ import { SITE } from "./src/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://kouta0000.github.io", // サブディレクトリを含めないドメインのみ
-  base: "/myblog/",                   // ここでサブディレクトリを定義
+  site: SITE.website, // サブディレクトリを含めないドメインのみ
+  base: "/myblog",                   // ここでサブディレクトリを定義
   trailingSlash: "always",  
   integrations: [
     sitemap({
