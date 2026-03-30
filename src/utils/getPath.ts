@@ -27,10 +27,11 @@ export function getPath(
   const blogId = id.split("/");
   const slug = blogId.length > 0 ? blogId.slice(-1) : blogId;
 
-  // If not inside the sub-dir, simply return the file path
+  const root = import.meta.env.BASE_URL.replace(/\/$/, "");
+
   if (!pathSegments || pathSegments.length < 1) {
-    return [basePath, slug].join("/");
+    return [root, basePath, slug].filter(Boolean).join("/");
   }
 
-  return [basePath, ...pathSegments, slug].join("/");
+  return [root, basePath, ...pathSegments, slug].filter(Boolean).join("/");
 }
