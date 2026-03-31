@@ -1,6 +1,7 @@
 ---
 pubDatetime: 2026-06-13T16:52:45.934Z
 title: aiaiaiaiaiaiaiaiaiaiaiaiaiaiai
+description: 実験記事です
 slug: adding-new-posts-in-astropaper-theme-aaa
 featured: true
 draft: false
