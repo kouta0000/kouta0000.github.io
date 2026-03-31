@@ -1,6 +1,6 @@
 ---
 pubDatetime: 2026-03-31
-title: aiaiaiaiaiaiaiaiaiaiaiaiaiaiai
+title: 最初の実験記事です
 description: 実験記事です
 slug: adding-new-posts-in-astropaper-theme-aaa
 featured: true
