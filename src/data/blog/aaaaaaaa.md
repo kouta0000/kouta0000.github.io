@@ -1,5 +1,5 @@
 ---
-pubDatetime: 2026-06-13T16:52:45.934Z
+pubDatetime: 2026-03-31
 title: aiaiaiaiaiaiaiaiaiaiaiaiaiaiai
 description: 実験記事です
 slug: adding-new-posts-in-astropaper-theme-aaa
