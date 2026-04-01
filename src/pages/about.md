@@ -3,35 +3,49 @@ layout: ../layouts/AboutLayout.astro
 title: "About"
 ---
 
-AstroPaper is a minimal, accessible and SEO-friendly blog theme built with [Astro](https://astro.build/) and [Tailwind CSS](https://tailwindcss.com/).
+ようこそ、小泉幸太のページへ。
 
-![Astro Paper](public/astropaper-og.jpg)
+## 何者か
 
-AstroPaper provides a solid foundation for blogs, or even portfolios\_ with full markdown support, built-in dark mode, and a clean layout that works out-of-the-box.
+東京都立大学の博士後期課程でフランス文学を研究しています。
 
-The blog posts in this theme also serve as guides, docs or example articles\_ making AstroPaper a flexible starting point for your next content-driven site.
+修士・博士の主研究は、18世紀の女性哲学者・科学者エミリー・デュ・シャトレです。日本ではほとんど研究者がいないと言えますが、2000年代に入り欧米諸国では非情に活発に研究されています。ニュートン『プリンキピア』の初にして現在でも唯一の仏語訳者と言えばその凄さがわかると思います。
+主著は『物理学教程』（Institutions de physique、自然哲学教程とか、自然哲学基礎とも訳せる）。ニュートン物理学をライプニッツ哲学的形而上学のもとに建設する書と言い表されることが多いですが、ライプニッツのみならず、ドイツ啓蒙思想、イギリス経験論、オランダのニュートン主義など、様々な思想的背景の見える面白い哲学書です。デュ・シャトレが自分の息子に向けてニュートン物理学を解説するという語りの形式を取っています。
 
-## Features
+主研究に限らず、18世紀啓蒙思想や、フランス文学、さらには一般の文学全般に興味があります。
 
-AstroPaper comes with a set of useful features that make content publishing easy and effective:
+## 経歴
 
-- SEO-friendly
-- Fast performance
-- Light & dark mode
-- Highly customizable
-- Organizable blog posts
-- Responsive & accessible
-- Static search with [PageFind](https://pagefind.app/)
-- Automatic social image generation
+- 東京都八王子市の、高尾山の近くに生まれる。高尾山の近くとは言えど、自然が豊かなわけではなく、東京の郊外の住宅地のような場所をイメージするのがよいでしょう。
+- 東京都立国立高校出身
+- 高校卒業後は、京都大学の理学部に入る
+- なんやかんやあり、京大を辞めふらふらする。
+- これまたなんやかんやあり、東京都立大学人文社会学部に入り直す。
+- フランス留学に1年くらい行く。
+- 学部、修士、博士、ずっと東京都立大学にいる。現在も。
 
-and so much more.
+## 趣味、能力
 
-## Show your support
+一種の言語オタクである。いわゆるポリグロットのような特殊能力は無いが、「1つの言語を習得するとは何か？」を常に考えており、できる限り母語以外の言語を何らかの形で「習得」したと言えるようになりたいと思っている。言語習得の鍵は、まず何よりも量である。語彙の数、表現の数、統語的小単位のひたすらな反復である。つまり面倒である。相当な物好きでなければ、多言語勉強などしようと思わん。
 
-If you like [AstroPaper](https://github.com/satnaing/astro-paper), consider giving it a star ⭐️.
+フランス語、英語、ドイツ語は生きているうちに、一定のレベルまで行きたいとは思っているが…。しかし、面倒である。
 
-Found a bug 🐛 or have an improvement ✨ in mind? Feel free to open an [issue](https://github.com/satnaing/astro-paper/issues), submit a [pull request](https://github.com/satnaing/astro-paper/pulls) or start a [discussion](https://github.com/satnaing/astro-paper/discussions).
+程度の差は莫大だが捨象すれば、英語、フランス語、ドイツ語、ロシア語、ラテン語、ギリシャ語、サンスクリット語、イタリア語、スペイン語、などをかじった（他にもありそうだが忘れた、アイヌ語とかも）。実用に耐えるのは、フランス語　>> 英語 >>> ドイツ語 >> ラテン語という感じである。
 
-If you find this theme helpful, you can also [sponsor me on GitHub](https://github.com/sponsors/satnaing) or [buy me a coffee](https://buymeacoffee.com/satnaing) to show your support — every penny counts.
+自分を文学オタクと言う資格はないと思っているが、何らかの意味における文学オタクだと思う。
 
-Kyay zuu! 🙏🏼
+20歳くらいまで、まともに読書というのをしたことがない。世に言う文学オタクのほとんどは早熟で、早いと小学生、遅くとも中学生くらいで、読書の快楽に目覚める者が多いというのが持論である。反面、わたしは今でも読書は好きとは言えない。
+
+広く言えば、言葉が好きなのだと思う。小説を読むのは、筋や物語を知りたいのではなく、きれいな文章を読みたいからである。好きな作家の多くは、文体を好くがゆえである。
+
+## 本ページについて
+
+文体練習場かつ思考をまとめる場である。
+
+アウトプットの意志は、インプットの質を高める。
+
+頭の中で雲のように舞う記号に名前を付け整理し保存することで、記憶のハードディスクにスッキリとデータが格納される。
+
+人文学研究は、読むと書くの動的循環である。
+
+
