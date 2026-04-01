@@ -40,12 +40,25 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>
-        フランス文学を研究する大学院生です。
-        第一には研究ブログというのが名目ですが、ただの日記のようなものもあります。
-        日々の学びのアウトプットや論理的な文章を書く習慣をつけることが、ある意味で中心的な目的です。
-        専門的な記述は、一般の役にも立つような内容にしていきたいです。
+      <div class="relative">
+        <p>
+      フランス文学を研究する大学院生です。
+
+      第一には研究ブログというのが名目ですが、ただの日記のようなものもあります。
+
+      日々の学びのアウトプットや論理的な文章を書く習慣をつけることが、ある意味で中心的な目的です。
+
+      専門的な記述は、一般の役にも立つような内容にしていきたいです。
       </p>
+    <div class="text-right">
+      <a 
+        href="/about/" 
+        class="text-sm text-gray-500 hover:text-accent transition-colors duration-200"
+      >
+        詳しく <span class="inline-block translate-y-[1px] hover:translate-y-[5px]">➧</span>
+      </a>
+    </div>
+  </div>
       {
         // only display if at least one social link is enabled
         SOCIALS.length > 0 && (
