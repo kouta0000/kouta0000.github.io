@@ -55,7 +55,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
         href="/about/" 
         class="text-sm text-gray-500 hover:text-accent transition-colors duration-200"
       >
-        詳しく <span class="inline-block translate-y-[1px] hover:translate-y-[5px]">➧</span>
+        詳しく <span class="inline-block translate-y-[1px] hover:translate-y-[5px]">→</span>
       </a>
     </div>
   </div>
@@ -79,7 +79,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
             { "border-b border-border": recentPosts.length > 0 },
           ]}
         >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+          <h2 class="text-2xl font-semibold tracking-wide">ピンどめ記事</h2>
           <ul>
             {featuredPosts.map(data => (
               <Card variant="h3" {...data} />
@@ -92,7 +92,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
     {
       recentPosts.length > 0 && (
         <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
+          <h2 class="text-2xl font-semibold tracking-wide">さいきんの記事</h2>
           <ul>
             {recentPosts.map(
               (data, index) =>
@@ -105,7 +105,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 
     <div class="my-8 text-center">
       <LinkButton href="/posts/">
-        All Posts
+        すべての記事
         <IconArrowRight class="inline-block rtl:-rotate-180" />
       </LinkButton>
     </div>
