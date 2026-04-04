@@ -9,7 +9,7 @@ const { postSlug } = Astro.props;
 
 <section class="comments-section mt-16 pt-10 border-t border-zinc-200 dark:border-zinc-800">
   <div class="flex items-baseline gap-3 mb-10">
-    <h2 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+    <h2 class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
       コメント
     </h2>
     <span id="comment-count" class="text-sm font-mono text-zinc-400 dark:text-zinc-500">
@@ -22,10 +22,10 @@ const { postSlug } = Astro.props;
       コメントを書く
     </h3>
     <form id="comment-form" novalidate>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+      <div class="grid grid-cols-2 gap-4 mb-4">
         <div class="field-group">
           <label for="author" class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
-            名前 <span class="text-rose-400">*</span>
+            なまえ <span class="text-rose-300">*</span>
           </label>
           <input
             id="author" name="author" type="text" required maxlength="50" placeholder="田中 太郎"
@@ -35,7 +35,7 @@ const { postSlug } = Astro.props;
         </div>
         <div class="field-group">
           <label for="email" class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
-            メールアドレス <span class="text-zinc-400 dark:text-zinc-600 font-normal">（任意）</span>
+            メール <span class="text-zinc-400 dark:text-zinc-600 font-normal">（任意）</span>
           </label>
           <input
             id="email" name="email" type="email" placeholder="hello@example.com"
