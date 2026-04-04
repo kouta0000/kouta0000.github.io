@@ -1,5 +1,6 @@
 import { defineConfig, envField, fontProviders } from "astro/config";
 import db from '@astrojs/db'; 
+import netlify from '@astrojs/netlify';
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
@@ -14,6 +15,8 @@ import { SITE } from "./src/config";
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server', // 2. static から server に変更
+  adapter: netlify(),
   site: SITE.website, // サブディレクトリを含めないドメインのみ
   integrations: [
     sitemap({
