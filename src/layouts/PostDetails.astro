@@ -1,6 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
+import Comments from "@/components/Comments.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
@@ -158,15 +159,7 @@ const nextPost =
         )
       }
     </div>
-    <div
-  id="zoomment"
-  data-theme="light"
-  data-language="en"
-  data-gravatar="monsterid"
-  data-emotions="👀"
-  data-visitors="true"
-></div>
-<script src="https://cdn.zoomment.com/zoomment.min.js"></script>
+    <Comments postSlug={slug} />
   </main>
   <Footer />
 </Layout>
