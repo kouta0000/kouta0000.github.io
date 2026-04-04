@@ -15,7 +15,7 @@ import { SITE } from "./src/config";
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'static', // 2. static から server に変更
+  output: 'hybrid', // 2. static から server に変更
   adapter: netlify(),
   site: SITE.website, // サブディレクトリを含めないドメインのみ
   integrations: [
