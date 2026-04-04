@@ -113,7 +113,7 @@ const nextPost =
     >
       <Content />
     </article>
-
+    <Comments postSlug={encodeURIComponent(post.id)} />
     <hr class="my-8 border-dashed" />
 
     <EditPost class="sm:hidden" {hideEditPost} {post} />
@@ -159,7 +159,6 @@ const nextPost =
         )
       }
     </div>
-    <Comments postSlug={encodeURIComponent(post.id)} />
   </main>
   <Footer />
 </Layout>
