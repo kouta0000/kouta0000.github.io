@@ -1,329 +1,177 @@
 ---
 // src/components/Comments.astro
-// サーバーサイドで初期コメントを取得し、クライアント側でインタラクションを追加
-
 interface Props {
   postSlug: string;
 }
-
 const { postSlug } = Astro.props;
+// DBアクセスなし・サーバー処理なし
 ---
 
 <section class="comments-section mt-16 pt-10 border-t border-zinc-200 dark:border-zinc-800">
-  <!-- ヘッダー -->
   <div class="flex items-baseline gap-3 mb-10">
     <h2 class="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
       コメント
     </h2>
-    <span
-      id="comment-count"
-      class="text-sm font-mono text-zinc-400 dark:text-zinc-500"
-    >
-      {initialComments.length} 件
+    <span id="comment-count" class="text-sm font-mono text-zinc-400 dark:text-zinc-500">
+      0 件
     </span>
   </div>
 
-  <!-- コメント投稿フォーム -->
   <div class="mb-12 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6">
     <h3 class="text-sm font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5">
       コメントを書く
     </h3>
-
     <form id="comment-form" novalidate>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <!-- 名前 -->
         <div class="field-group">
-          <label
-            for="author"
-            class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5"
-          >
+          <label for="author" class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
             名前 <span class="text-rose-400">*</span>
           </label>
           <input
-            id="author"
-            name="author"
-            type="text"
-            required
-            maxlength="50"
-            placeholder="田中 太郎"
-            class="w-full rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700
-                   px-3.5 py-2.5 text-sm text-zinc-900 dark:text-zinc-100
-                   placeholder:text-zinc-300 dark:placeholder:text-zinc-600
-                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                   transition-all duration-150"
+            id="author" name="author" type="text" required maxlength="50" placeholder="田中 太郎"
+            class="w-full rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-3.5 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-300 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-150"
           />
           <p class="field-error hidden text-xs text-rose-500 mt-1"></p>
         </div>
-
-        <!-- メール（任意） -->
         <div class="field-group">
-          <label
-            for="email"
-            class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5"
-          >
-            メールアドレス
-            <span class="text-zinc-400 dark:text-zinc-600 font-normal">（任意・公開されません）</span>
+          <label for="email" class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
+            メールアドレス <span class="text-zinc-400 dark:text-zinc-600 font-normal">（任意）</span>
           </label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="hello@example.com"
-            class="w-full rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700
-                   px-3.5 py-2.5 text-sm text-zinc-900 dark:text-zinc-100
-                   placeholder:text-zinc-300 dark:placeholder:text-zinc-600
-                   focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                   transition-all duration-150"
+            id="email" name="email" type="email" placeholder="hello@example.com"
+            class="w-full rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-3.5 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-300 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-150"
           />
-          <p class="field-error hidden text-xs text-rose-500 mt-1"></p>
         </div>
       </div>
-
-      <!-- コメント本文 -->
       <div class="field-group mb-5">
-        <label
-          for="body"
-          class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5"
-        >
+        <label for="body" class="block text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-1.5">
           コメント <span class="text-rose-400">*</span>
         </label>
         <textarea
-          id="body"
-          name="body"
-          required
-          maxlength="1000"
-          rows="4"
-          placeholder="感想・ご意見をどうぞ..."
-          class="w-full rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700
-                 px-3.5 py-2.5 text-sm text-zinc-900 dark:text-zinc-100
-                 placeholder:text-zinc-300 dark:placeholder:text-zinc-600
-                 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                 resize-none transition-all duration-150"
+          id="body" name="body" required maxlength="1000" rows="4" placeholder="感想・ご意見をどうぞ..."
+          class="w-full rounded-lg bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-3.5 py-2.5 text-sm text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-300 dark:placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all duration-150"
         ></textarea>
         <div class="flex justify-between mt-1">
           <p class="field-error hidden text-xs text-rose-500"></p>
-          <span class="char-counter text-xs text-zinc-400 dark:text-zinc-600 ml-auto">
-            0 / 1000
-          </span>
+          <span class="char-counter text-xs text-zinc-400 dark:text-zinc-600 ml-auto">0 / 1000</span>
         </div>
       </div>
-
-      <!-- 送信ボタン & フィードバック -->
       <div class="flex items-center gap-4">
         <button
-          type="submit"
-          id="submit-btn"
-          class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700
-                 px-5 py-2.5 text-sm font-medium text-white
-                 transition-all duration-150 active:scale-95
-                 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
-                 disabled:opacity-60 disabled:cursor-not-allowed"
+          type="submit" id="submit-btn"
+          class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <span class="btn-label">投稿する</span>
-          <svg
-            class="btn-spinner hidden h-4 w-4 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
+          <svg class="btn-spinner hidden h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
           </svg>
         </button>
-
-        <p
-          id="form-success"
-          class="hidden text-sm text-emerald-600 dark:text-emerald-400 font-medium"
-        >
-          ✓ コメントを投稿しました
-        </p>
-        <p
-          id="form-error"
-          class="hidden text-sm text-rose-500 font-medium"
-        ></p>
+        <p id="form-success" class="hidden text-sm text-emerald-600 dark:text-emerald-400 font-medium">✓ コメントを投稿しました</p>
+        <p id="form-error" class="hidden text-sm text-rose-500 font-medium"></p>
       </div>
     </form>
   </div>
 
-  <!-- コメント一覧 -->
-  <ul id="comment-list" class="space-y-6">
-    {initialComments.map((c) => (
-      <li
-        class="comment-item flex gap-4 animate-in"
-        data-id={c.id}
-      >
-        <!-- アバター -->
-        <div
-          class="flex-shrink-0 h-9 w-9 rounded-full flex items-center justify-center
-                 text-sm font-bold text-white select-none"
-          style={`background: ${avatarColor(c.author)}`}
-          aria-hidden="true"
-        >
-          {c.author.charAt(0).toUpperCase()}
-        </div>
+  <ul id="comment-list" class="space-y-6"></ul>
 
-        <div class="flex-1 min-w-0">
-          <!-- メタ情報 -->
-          <div class="flex items-baseline gap-2 mb-1.5">
-            <span class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-              {c.author}
-            </span>
-            <time
-              class="text-xs text-zinc-400 dark:text-zinc-500"
-              datetime={c.createdAt.toISOString()}
-            >
-              {formatDate(c.createdAt)}
-            </time>
-          </div>
-
-          <!-- 本文 -->
-          <p class="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap break-words">
-            {c.body}
-          </p>
-        </div>
-      </li>
-    ))}
-  </ul>
-
-  <!-- コメントなし -->
-  {initialComments.length === 0 && (
-    <p
-      id="empty-state"
-      class="text-center text-sm text-zinc-400 dark:text-zinc-600 py-10"
-    >
-      まだコメントはありません。最初のコメントを書いてみましょう！
-    </p>
-  )}
+  <p id="empty-state" class="text-center text-sm text-zinc-400 dark:text-zinc-600 py-10">
+    まだコメントはありません。最初のコメントを書いてみましょう！
+  </p>
 </section>
 
-<!-- ───────────────────────────────────────────────────────────────── -->
 <script define:vars={{ postSlug }}>
-// ページ読み込み時にコメントを取得して表示
-async function loadComments() {
-  try {
-    const res = await fetch(`/api/comments/${postSlug}`);
-    const comments = await res.json();
-    if (comments.length === 0) return;
-    if (emptyState) emptyState.remove();
-    comments.forEach(c => prependComment(c)); // 既存のprependCommentを流用
-    // ただし順序が逆になるので reverseして追加
-  } catch (e) {
-    console.error(e);
-  }
-}
-loadComments();
-// ── ユーティリティ ────────────────────────────────────────────────────
-function avatarColorClient(name) {
-  const colors = [
-    "#6366f1","#8b5cf6","#ec4899","#f43f5e",
-    "#f97316","#eab308","#22c55e","#14b8a6","#0ea5e9",
-  ];
+function avatarColor(name) {
+  const colors = ["#6366f1","#8b5cf6","#ec4899","#f43f5e","#f97316","#eab308","#22c55e","#14b8a6","#0ea5e9"];
   let hash = 0;
   for (const ch of name) hash = (hash * 31 + ch.charCodeAt(0)) & 0xffffffff;
   return colors[Math.abs(hash) % colors.length];
 }
 
-function formatDateClient(iso) {
+function formatDate(iso) {
   return new Intl.DateTimeFormat("ja-JP", {
-    year: "numeric", month: "long", day: "numeric",
-    hour: "2-digit", minute: "2-digit",
+    year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit",
   }).format(new Date(iso));
 }
 
-// ── DOM refs ──────────────────────────────────────────────────────────
-const form       = document.getElementById("comment-form");
-const authorEl   = document.getElementById("author");
-const emailEl    = document.getElementById("email");
-const bodyEl     = document.getElementById("body");
-const submitBtn  = document.getElementById("submit-btn");
-const btnLabel   = submitBtn.querySelector(".btn-label");
-const btnSpinner = submitBtn.querySelector(".btn-spinner");
+function escHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+const form        = document.getElementById("comment-form");
+const authorEl    = document.getElementById("author");
+const emailEl     = document.getElementById("email");
+const bodyEl      = document.getElementById("body");
+const submitBtn   = document.getElementById("submit-btn");
+const btnLabel    = submitBtn.querySelector(".btn-label");
+const btnSpinner  = submitBtn.querySelector(".btn-spinner");
 const formSuccess = document.getElementById("form-success");
 const formError   = document.getElementById("form-error");
 const commentList = document.getElementById("comment-list");
 const emptyState  = document.getElementById("empty-state");
 const countEl     = document.getElementById("comment-count");
+const counter     = document.querySelector(".char-counter");
 
-// ── 文字数カウンター ──────────────────────────────────────────────────
-const counter = document.querySelector(".char-counter");
+// 文字数カウンター
 bodyEl.addEventListener("input", () => {
   const len = bodyEl.value.length;
   counter.textContent = `${len} / 1000`;
   counter.classList.toggle("text-rose-400", len > 900);
 });
 
-// ── フィールドエラー表示 ──────────────────────────────────────────────
 function setFieldError(input, msg) {
   const errEl = input.closest(".field-group")?.querySelector(".field-error");
   if (!errEl) return;
   if (msg) {
     errEl.textContent = msg;
     errEl.classList.remove("hidden");
-    input.classList.add("border-rose-400", "focus:ring-rose-400");
-    input.classList.remove("focus:ring-indigo-500");
+    input.classList.add("border-rose-400");
   } else {
     errEl.classList.add("hidden");
-    input.classList.remove("border-rose-400", "focus:ring-rose-400");
-    input.classList.add("focus:ring-indigo-500");
+    input.classList.remove("border-rose-400");
   }
 }
 
 function clearErrors() {
-  [authorEl, emailEl, bodyEl].forEach((el) => setFieldError(el, ""));
+  [authorEl, emailEl, bodyEl].forEach(el => setFieldError(el, ""));
   formSuccess.classList.add("hidden");
   formError.classList.add("hidden");
 }
 
-// ── コメント要素を生成してリストの先頭に挿入 ─────────────────────────
-function prependComment(c) {
-  if (emptyState) emptyState.remove();
-
+function buildCommentEl(c) {
   const li = document.createElement("li");
   li.className = "comment-item flex gap-4";
   li.dataset.id = c.id;
-  li.style.opacity = "0";
-  li.style.transform = "translateY(-8px)";
-  li.style.transition = "opacity 0.3s ease, transform 0.3s ease";
-
   li.innerHTML = `
-    <div
-      class="flex-shrink-0 h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white select-none"
-      style="background:${avatarColorClient(c.author)}"
-      aria-hidden="true"
-    >${c.author.charAt(0).toUpperCase()}</div>
+    <div class="flex-shrink-0 h-9 w-9 rounded-full flex items-center justify-center text-sm font-bold text-white select-none"
+         style="background:${avatarColor(c.author)}" aria-hidden="true">${c.author.charAt(0).toUpperCase()}</div>
     <div class="flex-1 min-w-0">
       <div class="flex items-baseline gap-2 mb-1.5">
         <span class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">${escHtml(c.author)}</span>
-        <time class="text-xs text-zinc-400 dark:text-zinc-500" datetime="${c.createdAt}">
-          ${formatDateClient(c.createdAt)}
-        </time>
+        <time class="text-xs text-zinc-400 dark:text-zinc-500">${formatDate(c.createdAt)}</time>
       </div>
-      <p class="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap break-words">
-        ${escHtml(c.body)}
-      </p>
-    </div>
-  `;
-
-  commentList.prepend(li);
-  requestAnimationFrame(() => {
-    li.style.opacity = "1";
-    li.style.transform = "translateY(0)";
-  });
-
-  // カウンター更新
-  const prev = parseInt(countEl.textContent, 10) || 0;
-  countEl.textContent = `${prev + 1} 件`;
+      <p class="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap break-words">${escHtml(c.body)}</p>
+    </div>`;
+  return li;
 }
 
-function escHtml(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+// 初期ロード
+async function loadComments() {
+  try {
+    const res = await fetch(`/api/comments/${postSlug}`);
+    const comments = await res.json();
+    if (comments.length > 0) {
+      emptyState.remove();
+      comments.forEach(c => commentList.appendChild(buildCommentEl(c)));
+      countEl.textContent = `${comments.length} 件`;
+    }
+  } catch (e) {
+    console.error("コメント取得エラー", e);
+  }
 }
+loadComments();
 
-// ── フォーム送信 ──────────────────────────────────────────────────────
+// 投稿
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearErrors();
@@ -332,13 +180,11 @@ form.addEventListener("submit", async (e) => {
   const email  = emailEl.value.trim();
   const body   = bodyEl.value.trim();
 
-  // クライアントバリデーション
   let hasError = false;
   if (!author) { setFieldError(authorEl, "名前を入力してください"); hasError = true; }
   if (!body)   { setFieldError(bodyEl,   "コメントを入力してください"); hasError = true; }
   if (hasError) return;
 
-  // ローディング
   submitBtn.disabled = true;
   btnLabel.textContent = "送信中...";
   btnSpinner.classList.remove("hidden");
@@ -349,23 +195,28 @@ form.addEventListener("submit", async (e) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ author, email: email || undefined, body }),
     });
-
     const data = await res.json();
-
     if (!res.ok) {
       formError.textContent = data.error || "投稿に失敗しました";
       formError.classList.remove("hidden");
       return;
     }
-
-    // 成功
     form.reset();
     counter.textContent = "0 / 1000";
     formSuccess.classList.remove("hidden");
     setTimeout(() => formSuccess.classList.add("hidden"), 4000);
-    prependComment(data);
-  } catch {
-    formError.textContent = "ネットワークエラーが発生しました";
+
+    const li = buildCommentEl(data);
+    li.style.opacity = "0";
+    li.style.transform = "translateY(-8px)";
+    li.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    commentList.prepend(li);
+    requestAnimationFrame(() => { li.style.opacity = "1"; li.style.transform = "translateY(0)"; });
+
+    const prev = parseInt(countEl.textContent, 10) || 0;
+    countEl.textContent = `${prev + 1} 件`;
+  } catch (err) {
+    formError.textContent = `エラー: ${err.message}`;
     formError.classList.remove("hidden");
   } finally {
     submitBtn.disabled = false;
@@ -376,9 +227,7 @@ form.addEventListener("submit", async (e) => {
 </script>
 
 <style>
-  .comment-item {
-    animation: slideIn 0.3s ease forwards;
-  }
+  .comment-item { animation: slideIn 0.3s ease forwards; }
   @keyframes slideIn {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
