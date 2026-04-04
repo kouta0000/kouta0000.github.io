@@ -13,6 +13,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@astrojs/netlify": "latest",
     "@astrojs/db": "latest",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
