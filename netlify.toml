@@ -1,0 +1,16 @@
+[build]
+  command = "npx astro build --remote"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Netlify Functions（SSRのサーバーサイド処理）
+[functions]
+  node_bundler = "esbuild"
+
+# リダイレクト：SSRのエントリーポイントをNetlify Functionsに向ける
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/entry"
+  status = 200
