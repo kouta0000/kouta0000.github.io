@@ -1,4 +1,5 @@
 // src/pages/api/comments/[slug].ts
+export const prerender = false;  // ← 追加
 import type { APIRoute } from "astro";
 import { db, Comment, eq, desc } from "astro:db";
 
