@@ -7,15 +7,6 @@ interface Props {
 }
 
 const { postSlug } = Astro.props;
-
-import { db, Comment, eq, desc } from "astro:db";
-import { avatarColor, formatDate } from "../utils/commentUtils";
-
-const initialComments = await db
-  .select()
-  .from(Comment)
-  .where(eq(Comment.postSlug, postSlug))
-  .orderBy(desc(Comment.createdAt));
 ---
 
 <section class="comments-section mt-16 pt-10 border-t border-zinc-200 dark:border-zinc-800">
@@ -207,6 +198,20 @@ const initialComments = await db
 
 <!-- ───────────────────────────────────────────────────────────────── -->
 <script define:vars={{ postSlug }}>
+// ページ読み込み時にコメントを取得して表示
+async function loadComments() {
+  try {
+    const res = await fetch(`/api/comments/${postSlug}`);
+    const comments = await res.json();
+    if (comments.length === 0) return;
+    if (emptyState) emptyState.remove();
+    comments.forEach(c => prependComment(c)); // 既存のprependCommentを流用
+    // ただし順序が逆になるので reverseして追加
+  } catch (e) {
+    console.error(e);
+  }
+}
+loadComments();
 // ── ユーティリティ ────────────────────────────────────────────────────
 function avatarColorClient(name) {
   const colors = [
