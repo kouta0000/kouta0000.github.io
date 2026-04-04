@@ -17,8 +17,7 @@ import { SITE } from "./src/config";
 export default defineConfig({
   output: 'server', // 2. static から server に変更
   adapter: netlify({
-    // これを追加することで、Functionを確実にデプロイされる場所（dist内）へ紐付けます
-    functionName: 'entry', 
+    edgeMiddleware: true // パス不一致問題を回避するため、Edgeランタイム側に寄せます
   }),
   site: SITE.website, // サブディレクトリを含めないドメインのみ
   integrations: [
