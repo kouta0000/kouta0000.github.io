@@ -13,8 +13,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@astrojs/netlify": "latest",
-    "@astrojs/db": "latest",
+    "@astrojs/db": "0.14.3",     // latestをこれに変更
+    "@astrojs/netlify": "6.1.0",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
     "@resvg/resvg-js": "^2.6.2",
