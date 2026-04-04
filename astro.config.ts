@@ -16,7 +16,9 @@ import { SITE } from "./src/config";
 // https://astro.build/config
 export default defineConfig({
   output: 'server', // 2. static から server に変更
-  adapter: netlify(),
+  adapter: netlify({
+    edgeMiddleware: true, // これを有効にすることでデプロイ先をEdgeに変更
+  }),
   site: SITE.website, // サブディレクトリを含めないドメインのみ
   integrations: [
     sitemap({
