@@ -1,10 +1,9 @@
 [build]
-  command = "npx astro build --remote"
+  command = "npx astro db push --remote && npx astro build --remote"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
 
-# Netlify Functions（SSRのサーバーサイド処理）
 [functions]
   node_bundler = "esbuild"
