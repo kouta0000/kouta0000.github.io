@@ -94,7 +94,7 @@ const nextPost =
       transition:name={slugifyStr(title.replaceAll(".", "-"))}
       class="inline-block text-2xl font-bold text-accent sm:text-3xl"
     >
-      {title}
+      {title}{post.id}
     </h1>
     <div class="my-2 flex items-center gap-2">
       <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
