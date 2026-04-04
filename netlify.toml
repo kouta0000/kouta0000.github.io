@@ -1,3 +1,12 @@
 [build]
-  command = "pnpm run build"
+  command = "pnpm run build --remote"
   publish = "dist"
+
+[functions]
+  # AstroがFunctionを生成する場所を明示的に教えてあげます
+  directory = ".netlify/functions-internal"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/entry"
+  status = 200
