@@ -9,7 +9,7 @@ interface Props {
 const { postSlug } = Astro.props;
 
 import { db, Comment, eq, desc } from "astro:db";
-import { avatarColor, formatData } from "../utils/commentUtils"
+import { avatarColor, formatDate } from "../utils/commentUtils"
 
 const initialComments = await db
   .select()
