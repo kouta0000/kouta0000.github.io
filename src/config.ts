@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://unrivaled-chaja-e3c27e.netlify.app", // replace this with your deployed domain
+  website: "https://koizumi-kota.netlify.app", // replace this with your deployed domain
   author: "Kota Koizumi",
   profile: "https://satnaing.dev/",
   desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
