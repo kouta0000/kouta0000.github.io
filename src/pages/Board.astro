@@ -13,7 +13,9 @@ const comments = await db.select().from(boardComment).orderBy(desc(boardComment.
       <h1>MONO_BBS_v1.0</h1>
       <p>シンプルで現代的な、昔ながらの掲示板</p>
     </header>
-
+  <section class="list-section" id="comment-list">
+    <p>...</p>
+  </section>
     <section class="form-section">
       <form method="POST" action="/api/post-comment">
         <div class="input-group">
@@ -39,6 +41,27 @@ const comments = await db.select().from(boardComment).orderBy(desc(boardComment.
     </section>
   </main>
 </Layout>
+<script>
+  // ブラウザ側で実行される処理
+  async function loadComments() {
+    const res = await fetch('/api/post-comment'); // GETリクエスト
+    const comments = await res.json();
+    const container = document.getElementById('comment-list');
+    
+    if (container) {
+      container.innerHTML = comments.map(msg => `
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="author">${msg.author}</span>
+            <span class="date">${new Date(msg.publishedAt).toLocaleString()}</span>
+          </div>
+          <p class="content">${msg.content}</p>
+        </div>
+      `).join('');
+    }
+  }
+  loadComments();
+</script>
 
 <style>
   /* 全体の基本設定 */
