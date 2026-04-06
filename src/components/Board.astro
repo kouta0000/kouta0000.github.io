@@ -1,0 +1,126 @@
+---
+import Layout from '@/layouts/Layout.astro'; // 既存のレイアウトがあれば
+import { db, Comment, desc } from 'astro:db';
+import { actions } from 'astro:actions';
+
+// データの取得（新しい順）
+const comments = await db.select().from(Comment).orderBy(desc(Comment.publishedAt));
+---
+
+<Layout title="MONO BBS">
+  <main class="container">
+    <header>
+      <h1>MONO_BBS_v1.0</h1>
+      <p>シンプルで現代的な、昔ながらの掲示板</p>
+    </header>
+
+    <section class="form-section">
+      <form method="POST" action={actions.postComment}>
+        <div class="input-group">
+          <input type="text" name="author" placeholder="NAME" required />
+        </div>
+        <div class="input-group">
+          <textarea name="content" placeholder="MESSAGE..." required></textarea>
+        </div>
+        <button type="submit">POST</button>
+      </form>
+    </section>
+
+    <section class="list-section">
+      {comments.map((msg) => (
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="author">{msg.author}</span>
+            <span class="date">{msg.publishedAt.toLocaleString()}</span>
+          </div>
+          <p class="content">{msg.content}</p>
+        </div>
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  /* 全体の基本設定 */
+  :root {
+    --bg: #ffffff;
+    --text: #000000;
+    --border: #000000;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--text);
+    background-color: var(--bg);
+  }
+
+  header {
+    border-bottom: 4px solid var(--border);
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+  }
+
+  h1 { margin: 0; font-size: 1.5rem; letter-spacing: 2px; }
+
+  /* フォームのスタイル */
+  .form-section {
+    margin-bottom: 40px;
+  }
+
+  .input-group { margin-bottom: 15px; }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--border);
+    background: transparent;
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+  }
+
+  input:focus, textarea:focus {
+    background: #f0f0f0;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transition: 0.2s;
+  }
+
+  button:hover {
+    background: #333;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px #000;
+  }
+
+  /* 投稿リストのスタイル */
+  .post-card {
+    border: 2px solid var(--border);
+    padding: 15px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+
+  .author { font-weight: bold; text-transform: uppercase; }
+  .content { line-height: 1.6; white-space: pre-wrap; margin: 0; }
+</style>
