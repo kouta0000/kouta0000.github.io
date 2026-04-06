@@ -15,7 +15,14 @@ const Comment = defineTable({
     { on: ["postSlug"] },
   ],
 });
-
+const boardComment = defineTable({
+  columns: {
+    id: column.number({ primaryKey: true }),
+    author: column.text(),
+    content: column.text(),
+    publishedAt: column.date({ default: new Date() }),
+  }
+});
 export default defineDb({
-  tables: { Comment },
+  tables: { Comment, boardComment },
 });
