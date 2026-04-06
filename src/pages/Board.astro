@@ -4,7 +4,7 @@ import { db, Comment, desc } from 'astro:db';
 import { actions } from 'astro:actions';
 
 // データの取得（新しい順）
-const comments = await db.select().from(Comment).orderBy(desc(Comment.publishedAt));
+const comments = await db.select().from(boardComment).orderBy(desc(boardComment.publishedAt));
 ---
 
 <Layout title="MONO BBS">
