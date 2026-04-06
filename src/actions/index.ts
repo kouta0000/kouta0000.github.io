@@ -11,7 +11,7 @@ export const server = {
       content: z.string().min(1, "内容を入力してください"),
     }),
     handler: async (input) => {
-      // データベースに保存
+      throw new Error("L'ACTION EST BIEN APPELÉE !"); 
       const result = await db.insert(boardComment).values({
         author: input.author,
         content: input.content,
