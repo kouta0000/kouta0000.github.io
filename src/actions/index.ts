@@ -1,7 +1,7 @@
 export const prerender = false; 
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-import { db, Comment } from 'astro:db';
+import { db, boardComment } from 'astro:db';
 
 export const server = {
   postComment: defineAction({
@@ -12,7 +12,7 @@ export const server = {
     }),
     handler: async (input) => {
       // データベースに保存
-      const result = await db.insert(Comment).values({
+      const result = await db.insert(boardComment).values({
         author: input.author,
         content: input.content,
         publishedAt: new Date(),
