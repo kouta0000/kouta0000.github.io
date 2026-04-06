@@ -15,7 +15,7 @@ const comments = await db.select().from(boardComment).orderBy(desc(boardComment.
     </header>
 
     <section class="form-section">
-      <form method="POST" action={actions.postComment}>
+      <form method="POST" action="/api/post-comment">
         <div class="input-group">
           <input type="text" name="author" placeholder="NAME" required />
         </div>
