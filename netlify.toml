@@ -1,5 +1,5 @@
 [build]
-  command = "npx astro db push --remote && npx astro build --remote"
+  command = "npx astro db push --remote --force-reset && npx astro build --remote"
   publish = "dist"
 
 [build.environment]
