@@ -103,12 +103,6 @@ const styles = {
           node.style.transform = "translateY(0)";
         });
       });
-
-      window.scrollTo(0, document.body.scrollHeight);
-    } catch (e) {
-      statusMsg.textContent = "ERROR LOADING POSTS.";
-      console.error(e);
-    }
   }
 
   // 文字数カウント
