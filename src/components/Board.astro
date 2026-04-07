@@ -1,72 +1,89 @@
 ---
 // src/components/Board.astro
-import { db, BoardPost, asc } from "astro:db";
 import Layout from "@/layouts/Layout.astro";
 
-// 初期表示用のデータ取得
-const posts = await db.select().from(BoardPost).orderBy(asc(BoardPost.postedAt));
-
-// クライアントに渡すスタイル定義
+// クライアントJSでも使うクラス名
 const styles = {
-  post: "py-3 border-b border-[#e0e0e0] dark:border-[#2a2a2a] transition-colors",
+  post: "py-3 border-b border-[#e0e0e0] dark:border-[#2a2a2a]",
   meta: "flex gap-2 items-baseline mb-1",
-  name: "text-[0.7rem] font-bold tracking-tight uppercase",
-  time: "text-[0.62rem] text-[#999] dark:text-[#666] font-mono",
-  body: "text-[1.2rem] leading-relaxed whitespace-pre-wrap break-words opacity-90"
+  name: "text-[0.7rem] font-bold uppercase",
+  time: "text-[0.62rem] text-[#999] font-mono",
+  body: "text-[1.1rem] leading-relaxed whitespace-pre-wrap opacity-90"
 };
 ---
 
-<Layout title="Bulletin Board">
-<section class="max-w-2xl mx-auto px-4 py-8 font-mono text-[#111] dark:text-[#e4e4e4]">
-
-  <ol class="list-none p-0 m-0 mb-10" id="post-list">
-    {posts.map((p, i) => (
-      <li class={styles.post} data-index={i + 1}>
-        <div class={styles.meta}>
-          <span class="text-[#999] text-[0.7rem]">{i + 1}.</span>
-          <span class={styles.name}>{p.name}</span>
-          <time class={styles.time}>{p.postedAt.toLocaleString()}</time>
-        </div>
-        <p class={styles.body}>{p.body}</p>
-      </li>
-    ))}
-  </ol>
+<Layout title="BBS">
+<section class="max-w-2xl mx-auto px-4 py-8 font-mono">
+  
+  <ol class="list-none p-0 m-0 mb-10" id="post-list"></ol>
+  <p id="empty-state" class="text-sm text-[#999] italic hidden">まだ投稿はありません。</p>
 
   <form id="board-form" class="flex flex-col gap-3 border-t pt-8">
     <input id="inp-name" class="border p-2 bg-transparent" type="text" placeholder="名前" />
     <textarea id="inp-body" class="border p-2 bg-transparent min-h-[100px]" placeholder="メッセージ" required></textarea>
-    <button type="submit" id="board-btn" class="bg-[#111] text-white p-2">投稿</button>
+    <button type="submit" id="board-btn" class="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] p-2">
+      投稿
+    </button>
   </form>
 </section>
 </Layout>
 
 <script define:vars={{ styles }}>
-  // 成功例にならい、共通のヘルパーを定義
+  const list = document.getElementById("post-list");
+  const emptyState = document.getElementById("empty-state");
+
   function esc(str) {
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  function createPostEl(p, index) {
+  // 1件分のHTMLを作る関数
+  function buildPostEl(p, index) {
     const li = document.createElement("li");
     li.className = styles.post;
+    const date = new Date(p.postedAt).toLocaleString("ja-JP");
+    
     li.innerHTML = `
       <div class="${styles.meta}">
         <span class="text-[#999] text-[0.7rem]">${index}.</span>
         <span class="${styles.name}">${esc(p.name)}</span>
-        <time class="${styles.time}">Just now</time>
+        <time class="${styles.time}">${date}</time>
       </div>
       <p class="${styles.body}">${esc(p.body)}</p>
     `;
     return li;
   }
 
-  const form = document.getElementById("board-form");
-  const list = document.getElementById("post-list");
+  // --- 【重要】初期ロード用のGET処理 ---
+  async function loadPosts() {
+    try {
+      // 成功例と同じく、GETエンドポイントを叩く
+      const res = await fetch("/api/board"); 
+      const posts = await res.json();
+      
+      if (posts.length === 0) {
+        emptyState.classList.remove("hidden");
+        return;
+      }
 
+      list.innerHTML = ""; // クリア
+      posts.forEach((p, i) => {
+        list.appendChild(buildPostEl(p, i + 1));
+      });
+    } catch (e) {
+      console.error("GET Error:", e);
+    }
+  }
+
+  // 実行
+  loadPosts();
+
+  // --- 投稿（POST）処理 ---
+  const form = document.getElementById("board-form");
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("inp-name").value || "Anonyme";
-    const body = document.getElementById("inp-body").value;
+    const name = document.getElementById("inp-name").value.trim() || "Anonyme";
+    const body = document.getElementById("inp-body").value.trim();
+    if (!body) return;
 
     try {
       const res = await fetch("/api/board", {
@@ -74,19 +91,21 @@ const styles = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, body }),
       });
-
+      
+      const newPost = await res.json(); // サーバーから返ってきた保存済みデータ
       if (!res.ok) throw new Error();
 
-      // 1, 2, 3... の昇順なので、末尾に追加する
+      // 成功例のロジック：画面をリロードせず、DOMに直接追加
       const nextIndex = list.children.length + 1;
-      const newEl = createPostEl({ name, body }, nextIndex);
-      list.appendChild(newEl);
-
+      const el = buildPostEl(newPost, nextIndex);
+      list.appendChild(el);
+      
       form.reset();
-      newEl.scrollIntoView({ behavior: 'smooth' });
+      emptyState.classList.add("hidden");
+      el.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
-      alert("失敗しました");
+      alert("投稿に失敗しました");
     }
   });
 </script>
