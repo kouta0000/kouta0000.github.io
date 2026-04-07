@@ -1,8 +1,5 @@
 ---
 // src/components/Board.astro
-// サーバーサイドで Astro DB から投稿を取得し SSR レンダリング。
-// クライアント側は Vanilla JS で fetch → DOM 追加（フレームワーク不要）。
-
 import { db, BoardPost, desc } from "astro:db";
 import Layout from "@/layouts/Layout.astro"
 
@@ -23,284 +20,139 @@ function fmtDate(d: Date | string | null): string {
     minute: "2-digit",
   });
 }
----
-<Layout>
-<section class="board">
-  <h2 class="board-title">掲示板</h2>
 
-  <ol class="post-list" id="post-list">
+// Classes répétées pour la maintenance (arbitrary values pour coller à vos hex précis)
+const styles = {
+  post: "py-[0.6rem] border-b border-[#e0e0e0] dark:border-[#2a2a2a] first:border-t",
+  meta: "flex gap-[0.55rem] items-baseline mb-[0.15rem]",
+  name: "text-[0.7rem] font-medium",
+  time: "text-[0.64rem] text-[#999] dark:text-[#666]",
+  body: "text-[0.76rem] leading-[1.65] whitespace-pre-wrap break-words",
+  input: "font-inherit text-[0.76rem] bg-[#f7f7f7] dark:bg-[#1a1a1a] text-[#111] dark:text-[#e4e4e4] border-[0.5px] border-[#e0e0e0] dark:border-[#2a2a2a] px-[0.55rem] py-[0.42rem] outline-none transition-colors focus:border-[#111] dark:focus:border-[#e4e4e4] w-full rounded-none"
+};
+---
+
+<Layout>
+<section class="font-mono text-[#111] dark:text-[#e4e4e4]">
+  <h2 class="font-serif text-[1.3rem] font-normal border-b border-[#111] dark:border-[#e4e4e4] pb-[0.35rem] mb-[1.1rem]">
+    掲示板
+  </h2>
+
+  <ol class="list-none p-0 m-0 mb-[1.4rem]" id="post-list">
     {posts.length === 0 && (
-      <li class="post-empty">まだ投稿がありません。</li>
+      <li class="post-empty text-[0.74rem] text-[#999] dark:text-[#666] py-[0.4rem]">
+        まだ投稿がありません。
+      </li>
     )}
     {posts.map((p) => (
-      <li class="post">
-        <div class="post-meta">
-          <span class="post-name">{p.name}</span>
-          <time class="post-time" datetime={String(p.postedAt)}>
+      <li class={styles.post}>
+        <div class={styles.meta}>
+          <span class={styles.name}>{p.name}</span>
+          <time class={styles.time} datetime={String(p.postedAt)}>
             {fmtDate(p.postedAt)}
           </time>
         </div>
-        <p class="post-body">{p.body}</p>
+        <p class={styles.body}>{p.body}</p>
       </li>
     ))}
   </ol>
 
-  <form class="board-form" id="board-form" novalidate>
+  <form class="flex flex-col gap-[0.4rem]" id="board-form" novalidate>
     <input
       id="inp-name"
-      class="board-input"
+      class={styles.input}
       type="text"
       placeholder="名前（任意）"
       maxlength="50"
-      autocomplete="nickname"
     />
     <input
       id="inp-body"
-      class="board-input"
+      class={styles.input}
       type="text"
       placeholder="メッセージ（必須）"
       maxlength="400"
-      autocomplete="off"
       required
     />
-    <div class="form-row">
-      <span class="char-hint">
+    <div class="flex justify-between items-center">
+      <span class="text-[0.62rem] text-[#999] dark:text-[#666]">
         <span id="char-count">0</span> / 400
       </span>
-      <button type="submit" id="board-btn" class="board-btn">投稿</button>
+      <button 
+        type="submit" 
+        id="board-btn" 
+        class="font-inherit text-[0.7rem] bg-[#111] dark:bg-[#e4e4e4] text-[#f7f7f7] dark:text-[#1a1a1a] px-[0.85rem] py-[0.38rem] cursor-pointer tracking-wider transition-opacity hover:opacity-70 active:opacity-50 disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        投稿
+      </button>
     </div>
-    <p class="form-error" id="form-error" aria-live="polite"></p>
+    <p id="form-error" class="text-[0.65rem] text-[#b33] min-h-[1em] m-0" aria-live="polite"></p>
   </form>
 </section>
 </Layout>
-<style>
-  /* ── Google Fonts は layout 側で読み込んでください ──
-     Instrument Serif / Geist Mono                        */
 
-  .board {
-    --ink:    #111;
-    --muted:  #999;
-    --line:   #e0e0e0;
-    --bg-in:  #f7f7f7;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .board {
-      --ink:   #e4e4e4;
-      --muted: #666;
-      --line:  #2a2a2a;
-      --bg-in: #1a1a1a;
-    }
-  }
-
-  .board {
-    font-family: "Geist Mono", ui-monospace, monospace;
-    color: var(--ink);
-  }
-
-  /* タイトル */
-  .board-title {
-    font-family: "Instrument Serif", Georgia, serif;
-    font-size: 1.3rem;
-    font-weight: 400;
-    border-bottom: 1px solid var(--ink);
-    padding-bottom: .35rem;
-    margin-bottom: 1.1rem;
-  }
-
-  /* 投稿リスト */
-  .post-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.4rem;
-  }
-
-  .post {
-    padding: .6rem 0;
-    border-bottom: .5px solid var(--line);
-  }
-  .post:first-child { border-top: .5px solid var(--line); }
-
-  .post-meta {
-    display: flex;
-    gap: .55rem;
-    align-items: baseline;
-    margin-bottom: .15rem;
-  }
-
-  .post-name {
-    font-size: .7rem;
-    font-weight: 500;
-  }
-
-  .post-time {
-    font-size: .64rem;
-    color: var(--muted);
-  }
-
-  .post-body {
-    font-size: .76rem;
-    line-height: 1.65;
-    margin: 0;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  .post-empty {
-    font-size: .74rem;
-    color: var(--muted);
-    padding: .4rem 0;
-  }
-
-  /* フォーム */
-  .board-form {
-    display: flex;
-    flex-direction: column;
-    gap: .4rem;
-  }
-
-  .board-input {
-    font-family: inherit;
-    font-size: .76rem;
-    background: var(--bg-in);
-    color: var(--ink);
-    border: .5px solid var(--line);
-    padding: .42rem .55rem;
-    outline: none;
-    transition: border-color .12s;
-    width: 100%;
-    border-radius: 0;
-  }
-  .board-input:focus { border-color: var(--ink); }
-
-  .form-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .char-hint {
-    font-size: .62rem;
-    color: var(--muted);
-  }
-
-  .board-btn {
-    font-family: inherit;
-    font-size: .7rem;
-    background: var(--ink);
-    color: var(--bg-in);
-    border: none;
-    padding: .38rem .85rem;
-    cursor: pointer;
-    letter-spacing: .04em;
-    transition: opacity .12s;
-  }
-  .board-btn:hover    { opacity: .72; }
-  .board-btn:active   { opacity: .55; }
-  .board-btn:disabled { opacity: .38; cursor: not-allowed; }
-
-  .form-error {
-    font-size: .65rem;
-    color: #b33;
-    min-height: 1em;
-    margin: 0;
-  }
-</style>
-
-<script>
+<script define:vars={{ styles }}>
+  // On passe les classes Tailwind au script pour que l'injection JS soit identique au SSR
   (() => {
     const form    = document.getElementById("board-form");
-    const nameEl  = document.getElementById("inp-name")    as HTMLInputElement;
-    const bodyEl  = document.getElementById("inp-body")    as HTMLInputElement;
-    const btn     = document.getElementById("board-btn")   as HTMLButtonElement;
-    const errEl   = document.getElementById("form-error")  as HTMLParagraphElement;
-    const listEl  = document.getElementById("post-list")   as HTMLOListElement;
-    const countEl = document.getElementById("char-count")  as HTMLSpanElement;
+    const nameEl  = document.getElementById("inp-name");
+    const bodyEl  = document.getElementById("inp-body");
+    const btn     = document.getElementById("board-btn");
+    const errEl   = document.getElementById("form-error");
+    const listEl  = document.getElementById("post-list");
+    const countEl = document.getElementById("char-count");
 
-    // ── 文字カウンタ ──────────────────────────────────────
     bodyEl.addEventListener("input", () => {
       countEl.textContent = String(bodyEl.value.length);
     });
 
-    // ── 投稿追加（楽観的 UI）────────────────────────────────
-    function prependPost(name: string, body: string, postedAt: string) {
-      // 「まだ投稿がありません」行を削除
+    function prependPost(name, body, postedAt) {
       listEl.querySelector(".post-empty")?.remove();
 
       const li = document.createElement("li");
-      li.className = "post";
+      li.className = styles.post; // Application de la classe Tailwind via l'objet styles
       li.innerHTML =
-        `<div class="post-meta">` +
-          `<span class="post-name">${esc(name)}</span>` +
-          `<time class="post-time">${esc(postedAt)}</time>` +
+        `<div class="${styles.meta}">` +
+          `<span class="${styles.name}">${esc(name)}</span>` +
+          `<time class="${styles.time}">${esc(postedAt)}</time>` +
         `</div>` +
-        `<p class="post-body">${esc(body)}</p>`;
+        `<p class="${styles.body}">${esc(body)}</p>`;
 
-      // 先頭に挿入（border-top のため :first-child が当たるように）
       listEl.insertBefore(li, listEl.firstElementChild);
     }
 
-    // ── HTML エスケープ ───────────────────────────────────
-    function esc(s: string): string {
-      return s
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+    function esc(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
     }
 
-    // ── 日時フォーマット ──────────────────────────────────
-    function fmtNow(): string {
-      return new Date().toLocaleString("ja-JP", {
-        month:  "numeric",
-        day:    "numeric",
-        hour:   "2-digit",
-        minute: "2-digit",
-      });
+    function fmtNow() {
+      return new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
     }
 
-    // ── submit ────────────────────────────────────────────
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      errEl.textContent = "";
-
       const name = nameEl.value.trim() || "Anonymous";
       const body = bodyEl.value.trim();
 
-      if (!body) {
-        errEl.textContent = "メッセージを入力してください。";
-        bodyEl.focus();
-        return;
-      }
+      if (!body) return;
 
-      btn.disabled    = true;
-      btn.textContent = "送信中…";
-
+      btn.disabled = true;
       try {
         const res = await fetch("/api/board", {
-          method:  "POST",
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          body:    JSON.stringify({ name, body }),
+          body: JSON.stringify({ name, body }),
         });
 
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          throw new Error(
-            (data as { error?: string }).error ?? `エラー (HTTP ${res.status})`
-          );
-        }
+        if (!res.ok) throw new Error("Erreur");
 
-        // 成功 → 楽観的に DOM へ追加
         prependPost(name, body, fmtNow());
-        nameEl.value        = "";
-        bodyEl.value        = "";
+        nameEl.value = "";
+        bodyEl.value = "";
         countEl.textContent = "0";
       } catch (err) {
-        errEl.textContent =
-          err instanceof Error ? err.message : "投稿に失敗しました。";
+        errEl.textContent = "投稿に失敗しました。";
       } finally {
-        btn.disabled    = false;
-        btn.textContent = "投稿";
+        btn.disabled = false;
       }
     });
   })();
