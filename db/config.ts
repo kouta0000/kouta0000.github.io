@@ -20,7 +20,7 @@ const BoardPost = defineTable({
     id: column.number({ primaryKey: true }),
     name: column.text({ default: "Anonymous" }),
     body: column.text(),
-    postedAt: column.date({ default: NOW }),
+    postedAt: column.date({ default: new Date() }),
   },
 });
 export default defineDb({
