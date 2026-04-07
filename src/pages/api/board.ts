@@ -1,8 +1,4 @@
-// src/pages/api/board.ts
-// 掲示板の GET（一覧取得）/ POST（投稿）エンドポイント。
-// Astro DB の Drizzle クライアントを直接使用する。
-// このファイルは SSR（output: "server" or "hybrid"）が必要。
-
+export const pretender = false;
 import type { APIRoute } from "astro";
 import { db, BoardPost, desc } from "astro:db";
 
