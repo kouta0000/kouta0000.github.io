@@ -4,7 +4,7 @@
 // クライアント側は Vanilla JS で fetch → DOM 追加（フレームワーク不要）。
 
 import { db, BoardPost, desc } from "astro:db";
-import { Layout } from "@/layout/Layout.astro"
+import Layout from "@/layouts/Layout.astro"
 
 const posts = await db
   .select()
@@ -24,7 +24,7 @@ function fmtDate(d: Date | string | null): string {
   });
 }
 ---
-
+<Layout>
 <section class="board">
   <h2 class="board-title">掲示板</h2>
 
@@ -72,7 +72,7 @@ function fmtDate(d: Date | string | null): string {
     <p class="form-error" id="form-error" aria-live="polite"></p>
   </form>
 </section>
-
+</Layout>
 <style>
   /* ── Google Fonts は layout 側で読み込んでください ──
      Instrument Serif / Geist Mono                        */
