@@ -161,35 +161,117 @@ const styles = {
       const newPost = await res.json();
 
       // UIの即時更新
-      const nextIndex = list.children.length + 1;
-      const el = buildPostEl(newPost, nextIndex);
-      list.appendChild(el);
+<script define:vars={{ styles }}>
+  const list = document.getElementById("post-list");
+  const form = document.getElementById("board-form");
+  const statusMsg = document.getElementById("status-msg");
+  const bodyEl = document.getElementById("inp-body");
+  const countEl = document.getElementById("char-count");
+  const errEl = document.getElementById("form-error");
+  const btn = document.getElementById("board-btn");
+
+  const esc = (str) => String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  
+  const fmt = (iso) => {
+    const d = new Date(iso);
+    return new Intl.DateTimeFormat("ja-JP", {
+      month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit",
+    }).format(d);
+  };
+
+  function buildPostEl(p, index) {
+    const li = document.createElement("li");
+    li.className = styles.post;
+    li.innerHTML = `
+      <div class="${styles.meta}">
+        <span class="text-[#999] text-[0.7rem]">${index}.</span>
+        <span class="${styles.name}">${esc(p.name)}</span>
+        <time class="${styles.time}">${fmt(p.postedAt)}</time>
+      </div>
+      <p class="${styles.body}">${esc(p.body)}</p>
+    `;
+    return li;
+  }
+
+  // --- GET処理 ---
+  async function loadPosts() {
+    try {
+      const res = await fetch("/api/board");
+      const data = await res.json(); // { posts: [...] } が返る
       
-      // アニメーション実行
-      requestAnimationFrame(() => {
-        el.style.transition = "all 0.4s ease-out";
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
+      // API(GET)は desc(降順)で返してくるが、
+      // 表示は「古い順(1, 2, 3...)」にしたいので .reverse() する
+      const posts = (data.posts || []).reverse();
+
+      if (posts.length === 0) {
+        statusMsg.textContent = "まだ投稿はありません。";
+        return;
+      }
+
+      statusMsg.classList.add("hidden");
+      list.innerHTML = "";
+      posts.forEach((p, i) => list.appendChild(buildPostEl(p, i + 1)));
+      
+      // 最新(一番下)へスクロール
+      window.scrollTo(0, document.body.scrollHeight);
+    } catch (e) {
+      statusMsg.textContent = "読み込み失敗";
+    }
+  }
+
+  // --- POST処理 ---
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("inp-name").value.trim();
+    const body = bodyEl.value.trim();
+    if (!body) return;
+
+    btn.disabled = true;
+    errEl.textContent = "";
+
+    try {
+      const res = await fetch("/api/board", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, body }),
       });
 
+      if (!res.ok) throw new Error();
+      
+      const data = await res.json();
+      
+      /**
+       * 【ここが最重要】
+       * あなたのAPIは { post: inserted[0] } を返すので、
+       * data.post を buildPostEl に渡す必要があります。
+       */
+      const newPostData = data.post; 
+
+      // UI更新：現在のリストの最後に 1つ増えた番号で追加
+      const nextIndex = list.children.length + 1;
+      const el = buildPostEl(newPostData, nextIndex);
+      list.appendChild(el);
+      
       form.reset();
       countEl.textContent = "0";
       statusMsg.classList.add("hidden");
       
-      // スムーズスクロール
+      // 投稿後、自分の投稿が見えるようにスムーズスクロール
       el.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
-      errEl.textContent = "エラーが発生しました。時間を置いて再度お試しください。";
+      // APIとの通信に失敗、もしくは buildPostEl 内でエラーが出るとここに来ます
+      errEl.textContent = "エラーが発生しました。";
+      console.error(err);
     } finally {
       btn.disabled = false;
-      btn.textContent = originalText;
     }
   });
 
-  // 初期実行
+  bodyEl.addEventListener("input", () => { countEl.textContent = bodyEl.value.length; });
   loadPosts();
 </script>
+
 
 <style>
   .hidden { display: none !important; }
