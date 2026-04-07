@@ -21,27 +21,27 @@ function fmtDate(d: Date | string | null): string {
   });
 }
 
-// Classes répétées pour la maintenance (arbitrary values pour coller à vos hex précis)
+// Classes partagées entre SSR et Client JS
 const styles = {
-  post: "py-[0.6rem] border-b border-[#e0e0e0] dark:border-[#2a2a2a] first:border-t",
-  meta: "flex gap-[0.55rem] items-baseline mb-[0.15rem]",
-  name: "text-[0.7rem] font-medium",
-  time: "text-[0.64rem] text-[#999] dark:text-[#666]",
-  body: "text-[0.76rem] leading-[1.65] whitespace-pre-wrap break-words",
-  input: "font-inherit text-[0.76rem] bg-[#f7f7f7] dark:bg-[#1a1a1a] text-[#111] dark:text-[#e4e4e4] border-[0.5px] border-[#e0e0e0] dark:border-[#2a2a2a] px-[0.55rem] py-[0.42rem] outline-none transition-colors focus:border-[#111] dark:focus:border-[#e4e4e4] w-full rounded-none"
+  post: "py-3 border-b border-[#e0e0e0] dark:border-[#2a2a2a] first:border-t transition-colors",
+  meta: "flex gap-2 items-baseline mb-1",
+  name: "text-[0.7rem] font-bold tracking-tight uppercase",
+  time: "text-[0.62rem] text-[#999] dark:text-[#666] font-mono",
+  body: "text-[0.8rem] leading-relaxed whitespace-pre-wrap break-words opacity-90",
+  input: "font-mono text-[0.8rem] bg-[#f7f7f7] dark:bg-[#1a1a1a] text-[#111] dark:text-[#e4e4e4] border border-[#e0e0e0] dark:border-[#2a2a2a] px-3 py-2 outline-none transition-all focus:border-[#111] dark:focus:border-[#e4e4e4] w-full rounded-none placeholder:opacity-50"
 };
 ---
 
-<Layout>
-<section class="font-mono text-[#111] dark:text-[#e4e4e4]">
-  <h2 class="font-serif text-[1.3rem] font-normal border-b border-[#111] dark:border-[#e4e4e4] pb-[0.35rem] mb-[1.1rem]">
-    掲示板
+<Layout title="Bulletin Board">
+<section class="max-w-2xl mx-auto px-4 py-8 font-mono text-[#111] dark:text-[#e4e4e4]">
+  <h2 class="font-serif text-2xl font-normal border-b border-[#111] dark:border-[#e4e4e4] pb-2 mb-6">
+    Archive des messages
   </h2>
 
-  <ol class="list-none p-0 m-0 mb-[1.4rem]" id="post-list">
+  <ol class="list-none p-0 m-0 mb-10 space-y-1" id="post-list">
     {posts.length === 0 && (
-      <li class="post-empty text-[0.74rem] text-[#999] dark:text-[#666] py-[0.4rem]">
-        まだ投稿がありません。
+      <li class="post-empty text-sm text-[#999] italic py-4">
+        Aucun message pour le moment.
       </li>
     )}
     {posts.map((p) => (
@@ -57,43 +57,47 @@ const styles = {
     ))}
   </ol>
 
-  <form class="flex flex-col gap-[0.4rem]" id="board-form" novalidate>
-    <input
-      id="inp-name"
-      class={styles.input}
-      type="text"
-      placeholder="名前（任意）"
-      maxlength="50"
-    />
-    <input
-      id="inp-body"
-      class={styles.input}
-      type="text"
-      placeholder="メッセージ（必須）"
-      maxlength="400"
-      required
-    />
-    <div class="flex justify-between items-center">
-      <span class="text-[0.62rem] text-[#999] dark:text-[#666]">
-        <span id="char-count">0</span> / 400
-      </span>
-      <button 
-        type="submit" 
-        id="board-btn" 
-        class="font-inherit text-[0.7rem] bg-[#111] dark:bg-[#e4e4e4] text-[#f7f7f7] dark:text-[#1a1a1a] px-[0.85rem] py-[0.38rem] cursor-pointer tracking-wider transition-opacity hover:opacity-70 active:opacity-50 disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        投稿
-      </button>
-    </div>
-    <p id="form-error" class="text-[0.65rem] text-[#b33] min-h-[1em] m-0" aria-live="polite"></p>
-  </form>
+  <div class="mt-12 pt-8 border-t-2 border-[#111] dark:border-[#e4e4e4]">
+    <form class="flex flex-col gap-3" id="board-form" novalidate>
+      <input
+        id="inp-name"
+        class={styles.input}
+        type="text"
+        placeholder="Nom (optionnel)"
+        maxlength="50"
+        autocomplete="nickname"
+      />
+      <textarea
+        id="inp-body"
+        class={`${styles.input} min-h-[100px] resize-y`}
+        placeholder="Votre message..."
+        maxlength="400"
+        required
+      ></textarea>
+      
+      <div class="flex justify-between items-center mt-1">
+        <span class="text-[0.62rem] text-[#999] dark:text-[#666] tracking-widest uppercase">
+          <span id="char-count">0</span> / 400
+        </span>
+        <button 
+          type="submit" 
+          id="board-btn" 
+          class="font-mono text-xs bg-[#111] dark:bg-[#e4e4e4] text-[#f7f7f7] dark:text-[#1a1a1a] px-6 py-2 cursor-pointer hover:invert transition-all active:scale-95 disabled:opacity-30"
+        >
+          PUBLIER
+        </button>
+      </div>
+      <p id="form-error" class="text-[0.65rem] text-red-600 dark:text-red-400 min-h-[1em] mt-1" aria-live="polite"></p>
+    </form>
+  </div>
 </section>
 </Layout>
 
 <script define:vars={{ styles }}>
-  // On passe les classes Tailwind au script pour que l'injection JS soit identique au SSR
-  (() => {
+  const initBoard = () => {
     const form    = document.getElementById("board-form");
+    if (!form) return;
+
     const nameEl  = document.getElementById("inp-name");
     const bodyEl  = document.getElementById("inp-body");
     const btn     = document.getElementById("board-btn");
@@ -101,41 +105,43 @@ const styles = {
     const listEl  = document.getElementById("post-list");
     const countEl = document.getElementById("char-count");
 
+    // Compteur de caractères
     bodyEl.addEventListener("input", () => {
       countEl.textContent = String(bodyEl.value.length);
     });
 
+    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const fmtNow = () => new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+
     function prependPost(name, body, postedAt) {
       listEl.querySelector(".post-empty")?.remove();
-
       const li = document.createElement("li");
-      li.className = styles.post; // Application de la classe Tailwind via l'objet styles
-      li.innerHTML =
-        `<div class="${styles.meta}">` +
-          `<span class="${styles.name}">${esc(name)}</span>` +
-          `<time class="${styles.time}">${esc(postedAt)}</time>` +
-        `</div>` +
-        `<p class="${styles.body}">${esc(body)}</p>`;
-
+      li.className = styles.post;
+      li.innerHTML = `
+        <div class="${styles.meta}">
+          <span class="${styles.name}">${esc(name)}</span>
+          <time class="${styles.time}">${esc(postedAt)}</time>
+        </div>
+        <p class="${styles.body}">${esc(body)}</p>
+      `;
       listEl.insertBefore(li, listEl.firstElementChild);
-    }
-
-    function esc(s) {
-      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    }
-
-    function fmtNow() {
-      return new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
     }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const name = nameEl.value.trim() || "Anonymous";
+      errEl.textContent = "";
+      const name = nameEl.value.trim() || "Anonyme";
       const body = bodyEl.value.trim();
 
-      if (!body) return;
+      if (!body) {
+        errEl.textContent = "Le message est vide.";
+        return;
+      }
 
       btn.disabled = true;
+      const originalText = btn.textContent;
+      btn.textContent = "...";
+
       try {
         const res = await fetch("/api/board", {
           method: "POST",
@@ -143,17 +149,21 @@ const styles = {
           body: JSON.stringify({ name, body }),
         });
 
-        if (!res.ok) throw new Error("Erreur");
+        if (!res.ok) throw new Error("Erreur serveur");
 
         prependPost(name, body, fmtNow());
         nameEl.value = "";
         bodyEl.value = "";
         countEl.textContent = "0";
       } catch (err) {
-        errEl.textContent = "投稿に失敗しました。";
+        errEl.textContent = "Échec de l'envoi.";
       } finally {
         btn.disabled = false;
+        btn.textContent = originalText;
       }
     });
-  })();
+  };
+
+  // Support pour Astro View Transitions
+  document.addEventListener('astro:page-load', initBoard);
 </script>
