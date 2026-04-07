@@ -4,6 +4,7 @@
 // クライアント側は Vanilla JS で fetch → DOM 追加（フレームワーク不要）。
 
 import { db, BoardPost, desc } from "astro:db";
+import { Layout } from "@/layout/Layout.astro"
 
 const posts = await db
   .select()
