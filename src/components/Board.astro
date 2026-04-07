@@ -1,89 +1,154 @@
 ---
-// src/components/Board.astro
 import Layout from "@/layouts/Layout.astro";
 
-// クライアントJSでも使うクラス名
+// クライアントサイドJSと共有するデザイン定義
 const styles = {
-  post: "py-3 border-b border-[#e0e0e0] dark:border-[#2a2a2a]",
+  post: "py-4 border-b border-[#e0e0e0] dark:border-[#2a2a2a] transition-all duration-300",
   meta: "flex gap-2 items-baseline mb-1",
-  name: "text-[0.7rem] font-bold uppercase",
-  time: "text-[0.62rem] text-[#999] font-mono",
-  body: "text-[1.1rem] leading-relaxed whitespace-pre-wrap opacity-90"
+  name: "text-[0.7rem] font-bold tracking-tight uppercase text-[#111] dark:text-[#eee]",
+  time: "text-[0.62rem] text-[#999] dark:text-[#666] font-mono",
+  body: "text-[1.1rem] leading-relaxed whitespace-pre-wrap break-words text-[#333] dark:text-[#ccc] opacity-90",
+  input: "font-mono text-[1rem] bg-[#f7f7f7] dark:bg-[#1a1a1a] text-[#111] dark:text-[#e4e4e4] border border-[#e0e0e0] dark:border-[#2a2a2a] px-3 py-2 outline-none focus:border-[#111] dark:focus:border-[#e4e4e4] w-full rounded-none placeholder:opacity-50"
 };
 ---
 
-<Layout title="BBS">
-<section class="max-w-2xl mx-auto px-4 py-8 font-mono">
+<Layout title="Bulletin Board">
+<section class="max-w-2xl mx-auto px-4 py-12 font-mono">
   
-  <ol class="list-none p-0 m-0 mb-10" id="post-list"></ol>
-  <p id="empty-state" class="text-sm text-[#999] italic hidden">まだ投稿はありません。</p>
+  <ol class="list-none p-0 m-0 mb-12 space-y-1" id="post-list"></ol>
+  
+  <div id="status-msg" class="text-sm text-[#999] italic py-8 text-center">読み込み中...</div>
 
-  <form id="board-form" class="flex flex-col gap-3 border-t pt-8">
-    <input id="inp-name" class="border p-2 bg-transparent" type="text" placeholder="名前" />
-    <textarea id="inp-body" class="border p-2 bg-transparent min-h-[100px]" placeholder="メッセージ" required></textarea>
-    <button type="submit" id="board-btn" class="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] p-2">
-      投稿
-    </button>
-  </form>
+  <div class="mt-12 border-t-2 border-[#111] dark:border-[#eee] pt-10">
+    <form id="board-form" class="flex flex-col gap-4" novalidate>
+      <input
+        id="inp-name"
+        class={styles.input}
+        type="text"
+        placeholder="名前 (任意)"
+        maxlength="50"
+      />
+      <textarea
+        id="inp-body"
+        class={`${styles.input} min-h-[120px] resize-y`}
+        placeholder="メッセージを入力..."
+        maxlength="400"
+        required
+      ></textarea>
+      
+      <div class="flex justify-between items-center mt-2">
+        <span class="text-[0.62rem] text-[#999] tracking-widest uppercase">
+          <span id="char-count">0</span> / 400
+        </span>
+        <button 
+          type="submit" 
+          id="board-btn" 
+          class="bg-[#111] dark:bg-[#eee] text-[#fff] dark:text-[#111] px-10 py-3 text-xs font-bold hover:invert transition-all active:scale-95 disabled:opacity-30"
+        >
+          投稿する
+        </button>
+      </div>
+      <p id="form-error" class="text-[0.7rem] text-red-500 min-h-[1em] mt-2 italic"></p>
+    </form>
+  </div>
 </section>
 </Layout>
 
 <script define:vars={{ styles }}>
+  /**
+   * 天才プログラマーによる掲示板エンジン v1.0
+   */
   const list = document.getElementById("post-list");
-  const emptyState = document.getElementById("empty-state");
+  const form = document.getElementById("board-form");
+  const statusMsg = document.getElementById("status-msg");
+  const bodyEl = document.getElementById("inp-body");
+  const countEl = document.getElementById("char-count");
+  const errEl = document.getElementById("form-error");
+  const btn = document.getElementById("board-btn");
 
-  function esc(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
+  // XSS対策
+  const esc = (str) => str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-  // 1件分のHTMLを作る関数
+  // 日付フォーマット
+  const fmt = (iso) => {
+    const d = new Date(iso);
+    return isNaN(d) ? "---" : new Intl.DateTimeFormat("ja-JP", {
+      month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit",
+    }).format(d);
+  };
+
+  /**
+   * 1件の投稿DOMを生成する
+   */
   function buildPostEl(p, index) {
     const li = document.createElement("li");
     li.className = styles.post;
-    const date = new Date(p.postedAt).toLocaleString("ja-JP");
+    li.style.opacity = "0";
+    li.style.transform = "translateY(10px)";
     
     li.innerHTML = `
       <div class="${styles.meta}">
         <span class="text-[#999] text-[0.7rem]">${index}.</span>
-        <span class="${styles.name}">${esc(p.name)}</span>
-        <time class="${styles.time}">${date}</time>
+        <span class="${styles.name}">${esc(p.name || "Anonyme")}</span>
+        <time class="${styles.time}">${fmt(p.postedAt)}</time>
       </div>
       <p class="${styles.body}">${esc(p.body)}</p>
     `;
     return li;
   }
 
-  // --- 【重要】初期ロード用のGET処理 ---
+  /**
+   * 投稿を取得して描画 (GET)
+   */
   async function loadPosts() {
     try {
-      // 成功例と同じく、GETエンドポイントを叩く
-      const res = await fetch("/api/board"); 
-      const posts = await res.json();
+      const res = await fetch("/api/board");
+      if (!res.ok) throw new Error("Fetch failed");
       
+      const data = await res.json();
+      // APIが { posts: [] } を返す構造に対応
+      const posts = Array.isArray(data) ? data : (data.posts || []);
+
       if (posts.length === 0) {
-        emptyState.classList.remove("hidden");
+        statusMsg.textContent = "まだ投稿はありません。";
         return;
       }
 
-      list.innerHTML = ""; // クリア
+      statusMsg.classList.add("hidden");
+      list.innerHTML = "";
+      
       posts.forEach((p, i) => {
-        list.appendChild(buildPostEl(p, i + 1));
+        const el = buildPostEl(p, i + 1);
+        list.appendChild(el);
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
       });
+
+      // 最新（一番下）へスクロール
+      window.scrollTo(0, document.body.scrollHeight);
     } catch (e) {
-      console.error("GET Error:", e);
+      statusMsg.textContent = "投稿の読み込みに失敗しました。";
+      console.error(e);
     }
   }
 
-  // 実行
-  loadPosts();
+  // 文字数カウント
+  bodyEl.addEventListener("input", () => {
+    countEl.textContent = bodyEl.value.length;
+  });
 
-  // --- 投稿（POST）処理 ---
-  const form = document.getElementById("board-form");
+  // 投稿処理 (POST)
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("inp-name").value.trim() || "Anonyme";
-    const body = document.getElementById("inp-body").value.trim();
+    const name = document.getElementById("inp-name").value.trim();
+    const body = bodyEl.value.trim();
+
     if (!body) return;
+
+    btn.disabled = true;
+    const originalText = btn.textContent;
+    btn.textContent = "送信中...";
+    errEl.textContent = "";
 
     try {
       const res = await fetch("/api/board", {
@@ -91,21 +156,41 @@ const styles = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, body }),
       });
-      
-      const newPost = await res.json(); // サーバーから返ってきた保存済みデータ
-      if (!res.ok) throw new Error();
 
-      // 成功例のロジック：画面をリロードせず、DOMに直接追加
+      if (!res.ok) throw new Error("Server Error");
+      const newPost = await res.json();
+
+      // UIの即時更新
       const nextIndex = list.children.length + 1;
       const el = buildPostEl(newPost, nextIndex);
       list.appendChild(el);
       
+      // アニメーション実行
+      requestAnimationFrame(() => {
+        el.style.transition = "all 0.4s ease-out";
+        el.style.opacity = "1";
+        el.style.transform = "translateY(0)";
+      });
+
       form.reset();
-      emptyState.classList.add("hidden");
+      countEl.textContent = "0";
+      statusMsg.classList.add("hidden");
+      
+      // スムーズスクロール
       el.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
-      alert("投稿に失敗しました");
+      errEl.textContent = "エラーが発生しました。時間を置いて再度お試しください。";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
     }
   });
+
+  // 初期実行
+  loadPosts();
 </script>
+
+<style>
+  .hidden { display: none !important; }
+</style>
