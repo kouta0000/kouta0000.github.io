@@ -1,4 +1,4 @@
-export const pretender = false;
+export const prerender = false;
 import type { APIRoute } from "astro";
 import { db, BoardPost, desc } from "astro:db";
 
