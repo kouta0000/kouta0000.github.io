@@ -1,7 +1,7 @@
 [build]
-  command = "npx astro db push --remote && npx astro build --remote"
+  command = "npx astro build --remote"
   publish = "dist"
-
+  
 [build.environment]
   NODE_VERSION = "20"
 
