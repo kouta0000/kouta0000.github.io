@@ -52,7 +52,7 @@ const { postSlug } = Astro.props;
       </div>
       <div class="form-actions">
         <button type="submit" id="submit-btn" class="submit-btn">
-          <span class="btn-label">投稿する →</span>
+          <span class="btn-label">投稿</span>
           <svg class="btn-spinner hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
@@ -232,7 +232,7 @@ form.addEventListener("submit", async (e) => {
     display: flex;
     align-items: baseline;
     gap: 0.75rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
   .comments-label {
     font-size: 0.6875rem;
@@ -277,7 +277,7 @@ form.addEventListener("submit", async (e) => {
     .form-grid { grid-template-columns: 1fr; }
   }
 
-  .field-group { display: flex; flex-direction: column; margin-bottom: 0.75rem; }
+  .field-group { display: flex; flex-direction: column; margin-bottom: 0.25rem; }
   .field-label {
     font-size: 0.6875rem;
     font-weight: 500;
