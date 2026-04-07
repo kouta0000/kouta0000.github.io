@@ -18,19 +18,13 @@ const { postSlug } = Astro.props;
     <form id="comment-form" novalidate>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
         <div class="field-group">
-          <label for="author" class="field-label">
-            なまえ <span class="required">*</span>
-          </label>
           <input
-            id="author" name="author" type="text" required maxlength="50" placeholder="田中 太郎"
+            id="author" name="author" type="text" required maxlength="50" placeholder="山田 太郎"
             class="field-input"
           />
           <p class="field-error hidden"></p>
         </div>
         <div class="field-group">
-          <label for="email" class="field-label">
-            メール <span class="optional">（任意）</span>
-          </label>
           <input
             id="email" name="email" type="email" placeholder="hello@example.com"
             class="field-input"
@@ -38,11 +32,8 @@ const { postSlug } = Astro.props;
         </div>
       </div>
       <div class="field-group">
-        <label for="body" class="field-label">
-          コメント <span class="required">*</span>
-        </label>
         <textarea
-          id="body" name="body" required maxlength="1000" rows="4" placeholder="感想・ご意見をどうぞ..."
+          id="body" name="body" required maxlength="1000" rows="4" placeholder="何でも気にせず適当に"
           class="field-input field-textarea"
         ></textarea>
         <div class="textarea-footer">
