@@ -1,11 +1,11 @@
 ---
-// 1. サーバーサイドレンダリングを強制（リロードのたびにDBを読み直す）
+// 【最重要】これがないと、リロードしても「ビルド時の古いデータ」が出続けます。
 export const prerender = false;
 
 import { db, BoardPost, asc } from "astro:db";
 import Layout from "@/layouts/Layout.astro";
 
-// 2. サーバー側で全データを「古い順」に取得
+// リロードのたびに、サーバー側でこのクエリが走り、最新のDBを100%取得します。
 const posts = await db
   .select()
   .from(BoardPost)
@@ -40,14 +40,14 @@ const styles = {
     </ol>
     
     {posts.length === 0 && (
-      <div class="text-xs text-[#aaa] tracking-widest text-center py-10 uppercase">
+      <div id="status-msg" class="text-xs text-[#aaa] tracking-widest text-center py-10 uppercase">
         NO POSTS YET.
       </div>
     )}
 
     <form id="board-form" class="flex flex-col gap-2 border-t pt-8 border-[#eee] dark:border-[#222]">
-      <input id="inp-name" name="name" class={styles.input} type="text" placeholder="NAME (OPTIONAL)" maxlength="50" />
-      <textarea id="inp-body" name="body" class={`${styles.input} min-h-[150px] resize-y`} placeholder="ENTER MESSAGE..." maxlength="400" required></textarea>
+      <input id="inp-name" class={styles.input} type="text" placeholder="NAME (OPTIONAL)" maxlength="50" />
+      <textarea id="inp-body" class={`${styles.input} min-h-[150px] resize-y`} placeholder="ENTER MESSAGE..." maxlength="400" required></textarea>
       
       <div class="flex justify-between items-center">
         <span class="text-[0.65rem] text-[#aaa] font-bold">
@@ -62,22 +62,24 @@ const styles = {
   </section>
 </Layout>
 
-<script>
+<script define:vars={{ styles }}>
+  const list = document.getElementById("post-list");
   const form = document.getElementById("board-form");
   const bodyInput = document.getElementById("inp-body");
   const charCount = document.getElementById("char-count");
-  const submitBtn = document.getElementById("board-btn");
+  const btn = document.getElementById("board-btn");
 
-  // 3. 投稿処理
-  form?.addEventListener("submit", async (e) => {
+  const esc = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const fmt = (iso) => new Intl.DateTimeFormat("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+
+  // 投稿処理
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    
-    const name = document.getElementById("inp-name").value.trim();
+    const name = document.getElementById("inp-name").value.trim() || "Anonymous";
     const body = bodyInput.value.trim();
     if (!body) return;
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = "SENDING...";
+    btn.disabled = true;
 
     try {
       const res = await fetch("/api/board", {
@@ -88,18 +90,40 @@ const styles = {
 
       if (!res.ok) throw new Error();
 
-      // 【重要】投稿に成功したら、ページをリロードする。
-      // これにより、サーバー側の最新データ(initialPosts)が確実に読み込まれる。
-      window.location.reload();
+      const data = await res.json();
+      const newPost = data.post;
+
+      // 1. クライアント側で即時反映（これで「反映されない」感覚を消す）
+      const li = document.createElement("li");
+      li.className = styles.post;
+      li.innerHTML = `
+        <div class="${styles.meta}">
+          <span class="text-[#999] text-[0.7rem]">${list.children.length + 1}.</span>
+          <span class="${styles.name}">${esc(newPost.name)}</span>
+          <time class="${styles.time}">${fmt(newPost.postedAt)}</time>
+        </div>
+        <p class="${styles.body}">${esc(newPost.body)}</p>
+      `;
+      list.appendChild(li);
+      
+      const statusMsg = document.getElementById("status-msg");
+      if (statusMsg) statusMsg.classList.add("hidden");
+
+      form.reset();
+      charCount.textContent = "0";
 
     } catch (err) {
       document.getElementById("form-error").textContent = "FAILED TO POST.";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "投稿";
+    } finally {
+      btn.disabled = false;
     }
   });
 
-  bodyInput?.addEventListener("input", () => {
+  bodyInput.addEventListener("input", () => {
     charCount.textContent = bodyInput.value.length;
   });
 </script>
+
+<style>
+  .hidden { display: none !important; }
+</style>
