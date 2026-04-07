@@ -1,154 +1,92 @@
 ---
-export const prerender = false;
 // src/components/Board.astro
 import { db, BoardPost, asc } from "astro:db";
-import Layout from "@/layouts/Layout.astro"
+import Layout from "@/layouts/Layout.astro";
 
-const posts = await db
-  .select()
-  .from(BoardPost)
-  .orderBy(asc(BoardPost.postedAt);
+// 初期表示用のデータ取得
+const posts = await db.select().from(BoardPost).orderBy(asc(BoardPost.postedAt));
 
-function fmtDate(d: Date | string | null): string {
-  if (!d) return "";
-  const dt = d instanceof Date ? d : new Date(d);
-  if (isNaN(dt.getTime())) return String(d);
-  return dt.toLocaleString("ja-JP", {
-    month:  "numeric",
-    day:    "numeric",
-    hour:   "2-digit",
-    minute: "2-digit",
-  });
-}
-
-// Classes partagées entre SSR et Client JS
+// クライアントに渡すスタイル定義
 const styles = {
-  post: "py-3 border-[#e0e0e0] dark:border-[#2a2a2a]  transition-colors",
+  post: "py-3 border-b border-[#e0e0e0] dark:border-[#2a2a2a] transition-colors",
   meta: "flex gap-2 items-baseline mb-1",
   name: "text-[0.7rem] font-bold tracking-tight uppercase",
   time: "text-[0.62rem] text-[#999] dark:text-[#666] font-mono",
-  body: "text-[1rem] leading-relaxed whitespace-pre-wrap break-words opacity-90",
-  input: "font-mono text-[1rem] bg-[#f7f7f7] dark:bg-[#1a1a1a] text-[#111] dark:text-[#e4e4e4] border border-[#e0e0e0] dark:border-[#2a2a2a] px-3 py-2 outline-none transition-all focus:border-[#111] dark:focus:border-[#e4e4e4] w-full rounded-none placeholder:opacity-50"
+  body: "text-[1.2rem] leading-relaxed whitespace-pre-wrap break-words opacity-90"
 };
 ---
 
 <Layout title="Bulletin Board">
-<section class="max-w-2xl mx-auto px-1 py-8 font-mono text-[#111] dark:text-[#e4e4e4]">
+<section class="max-w-2xl mx-auto px-4 py-8 font-mono text-[#111] dark:text-[#e4e4e4]">
 
-  <ol class="list-none p-0 m-0 mb-10 space-y-1" id="post-list">
-  {posts.length === 0 && (
-    <li class="post-empty text-sm text-[#999] italic py-4">
-      まだ投稿はありません。
-    </li>
-  )}
-  {/* Utilisation de slice().reverse() pour ne pas muter l'original si besoin */}
-  {posts.slice().reverse().map((p, i) => (
-    <li class={styles.post}>
-      <div class={styles.meta}>
-        <span class="text-[#999] text-[0.7rem]">{i + 1}.</span>
-        <span class={styles.name}>{p.name}</span>
-        <time class={styles.time} datetime={String(p.postedAt)}>
-          {fmtDate(p.postedAt)}
-        </time>
-      </div>
-      <p class={styles.body}>{p.body}</p>
-    </li>
-  ))}
-</ol>
+  <ol class="list-none p-0 m-0 mb-10" id="post-list">
+    {posts.map((p, i) => (
+      <li class={styles.post} data-index={i + 1}>
+        <div class={styles.meta}>
+          <span class="text-[#999] text-[0.7rem]">{i + 1}.</span>
+          <span class={styles.name}>{p.name}</span>
+          <time class={styles.time}>{p.postedAt.toLocaleString()}</time>
+        </div>
+        <p class={styles.body}>{p.body}</p>
+      </li>
+    ))}
+  </ol>
 
-
-  <div class="mt-8 border-[#111] dark:border-[#e4e4e4]">
-    <form class="flex flex-col gap-3" id="board-form" novalidate>
-      <input
-        id="inp-name"
-        class={styles.input}
-        type="text"
-        placeholder="Nom (optionnel)"
-        maxlength="50"
-        autocomplete="nickname"
-      />
-      <textarea
-        id="inp-body"
-        class={`${styles.input} min-h-[100px] resize-y`}
-        placeholder="Votre message..."
-        maxlength="400"
-        required
-      ></textarea>
-      
-      <div class="flex justify-between items-center mt-1">
-        <span class="text-[0.62rem] text-[#999] dark:text-[#666] tracking-widest uppercase">
-          <span id="char-count">0</span> / 400
-        </span>
-        <button 
-          type="submit" 
-          id="board-btn" 
-          class="font-mono text-xs bg-[#111] dark:bg-[#e4e4e4] text-[#f7f7f7] dark:text-[#1a1a1a] px-6 py-2 cursor-pointer hover:invert transition-all active:scale-95 disabled:opacity-30"
-        >
-          投稿
-        </button>
-      </div>
-      <p id="form-error" class="text-[0.65rem] text-red-600 dark:text-red-400 min-h-[1em] mt-1" aria-live="polite"></p>
-    </form>
-  </div>
+  <form id="board-form" class="flex flex-col gap-3 border-t pt-8">
+    <input id="inp-name" class="border p-2 bg-transparent" type="text" placeholder="名前" />
+    <textarea id="inp-body" class="border p-2 bg-transparent min-h-[100px]" placeholder="メッセージ" required></textarea>
+    <button type="submit" id="board-btn" class="bg-[#111] text-white p-2">投稿</button>
+  </form>
 </section>
 </Layout>
 
-<script>
-  import { navigate } from "astro:transitions/client";
+<script define:vars={{ styles }}>
+  // 成功例にならい、共通のヘルパーを定義
+  function esc(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
 
-  const initBoard = () => {
-    const form = document.getElementById("board-form") as HTMLFormElement;
-    if (!form) return;
+  function createPostEl(p, index) {
+    const li = document.createElement("li");
+    li.className = styles.post;
+    li.innerHTML = `
+      <div class="${styles.meta}">
+        <span class="text-[#999] text-[0.7rem]">${index}.</span>
+        <span class="${styles.name}">${esc(p.name)}</span>
+        <time class="${styles.time}">Just now</time>
+      </div>
+      <p class="${styles.body}">${esc(p.body)}</p>
+    `;
+    return li;
+  }
 
-    const nameEl = document.getElementById("inp-name") as HTMLInputElement;
-    const bodyEl = document.getElementById("inp-body") as HTMLTextAreaElement;
-    const btn    = document.getElementById("board-btn") as HTMLButtonElement;
-    const errEl  = document.getElementById("form-error") as HTMLParagraphElement;
-    const countEl = document.getElementById("char-count") as HTMLSpanElement;
+  const form = document.getElementById("board-form");
+  const list = document.getElementById("post-list");
 
-    // Compteur
-    bodyEl.addEventListener("input", () => {
-      countEl.textContent = String(bodyEl.value.length);
-    });
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("inp-name").value || "Anonyme";
+    const body = document.getElementById("inp-body").value;
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      errEl.textContent = "";
-      
-      const name = nameEl.value.trim() || "Anonyme";
-      const body = bodyEl.value.trim();
+    try {
+      const res = await fetch("/api/board", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, body }),
+      });
 
-      if (!body) return;
+      if (!res.ok) throw new Error();
 
-      btn.disabled = true;
-      const originalText = btn.textContent;
-      btn.textContent = "...";
+      // 1, 2, 3... の昇順なので、末尾に追加する
+      const nextIndex = list.children.length + 1;
+      const newEl = createPostEl({ name, body }, nextIndex);
+      list.appendChild(newEl);
 
-      try {
-        const res = await fetch("/api/board", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, body }),
-        });
+      form.reset();
+      newEl.scrollIntoView({ behavior: 'smooth' });
 
-        if (!res.ok) throw new Error("Erreur serveur");
-
-        // --- LA CLÉ EST ICI ---
-        // On demande à Astro de naviguer vers la même page.
-        // Cela déclenche le re-rendu SSR et met à jour la liste.
-        await navigate(window.location.pathname, { history: 'replace' });
-        
-        // Reset du formulaire après la navigation
-        form.reset();
-        countEl.textContent = "0";
-      } catch (err) {
-        errEl.textContent = "投稿に失敗しました。";
-        btn.disabled = false;
-      } finally {
-        btn.textContent = originalText;
-      }
-    });
-  };
-
-  document.addEventListener('astro:page-load', initBoard);
+    } catch (err) {
+      alert("失敗しました");
+    }
+  });
 </script>
