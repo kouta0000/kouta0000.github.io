@@ -1,5 +1,5 @@
 // db/config.ts
-import { defineDb, defineTable, column } from "astro:db";
+import { defineDb, defineTable, column, NOW } from "astro:db";
 
 export const Comment = defineTable({
   columns: {
@@ -8,7 +8,7 @@ export const Comment = defineTable({
     author: column.text(),
     email: column.text({ optional: true }),
     body: column.text(),
-    createdAt: column.date({ default: () => new Date() }),
+    createdAt: column.date({ default: NOW }),
     approved: column.boolean({ default: true }),
   },
   indexes: [
@@ -20,7 +20,7 @@ export const BoardPost = defineTable({
     id: column.number({ primaryKey: true }),
     name: column.text({ default: "Anonymous" }),
     body: column.text(),
-    postedAt: column.date({ default: () => new Date() }),
+    postedAt: column.date({ default: NOW}),
   },
 });
 export default defineDb({
