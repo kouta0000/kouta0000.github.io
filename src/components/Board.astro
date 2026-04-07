@@ -36,24 +36,26 @@ const styles = {
 <section class="max-w-2xl mx-auto px-1 py-8 font-mono text-[#111] dark:text-[#e4e4e4]">
 
   <ol class="list-none p-0 m-0 mb-10 space-y-1" id="post-list">
-    {posts.length === 0 && (
-      <li class="post-empty text-sm text-[#999] italic py-4">
-        まだ投稿はありません。
-      </li>
-    )}
-    {posts.reverse().map((p,i) => (
-      <li class={styles.post}>
-        <div class={styles.meta}>
-          <span class="gray-200 text-[0.7rem]">{i+1}.<>
-          <span class={styles.name}>{p.name}</span>
-          <time class={styles.time} datetime={String(p.postedAt)}>
-            {fmtDate(p.postedAt)}
-          </time>
-        </div>
-        <p class={styles.body}>{p.body}</p>
-      </li>
-    ))}
-  </ol>
+  {posts.length === 0 && (
+    <li class="post-empty text-sm text-[#999] italic py-4">
+      まだ投稿はありません。
+    </li>
+  )}
+  {/* Utilisation de slice().reverse() pour ne pas muter l'original si besoin */}
+  {posts.slice().reverse().map((p, i) => (
+    <li class={styles.post}>
+      <div class={styles.meta}>
+        <span class="text-[#999] text-[0.7rem]">{i + 1}.</span>
+        <span class={styles.name}>{p.name}</span>
+        <time class={styles.time} datetime={String(p.postedAt)}>
+          {fmtDate(p.postedAt)}
+        </time>
+      </div>
+      <p class={styles.body}>{p.body}</p>
+    </li>
+  ))}
+</ol>
+
 
   <div class="mt-8 border-[#111] dark:border-[#e4e4e4]">
     <form class="flex flex-col gap-3" id="board-form" novalidate>
@@ -92,49 +94,32 @@ const styles = {
 </Layout>
 
 <script define:vars={{ styles }}>
+<script>
+  import { navigate } from "astro:transitions/client";
+
   const initBoard = () => {
-    const form    = document.getElementById("board-form");
+    const form = document.getElementById("board-form") as HTMLFormElement;
     if (!form) return;
 
-    const nameEl  = document.getElementById("inp-name");
-    const bodyEl  = document.getElementById("inp-body");
-    const btn     = document.getElementById("board-btn");
-    const errEl   = document.getElementById("form-error");
-    const listEl  = document.getElementById("post-list");
-    const countEl = document.getElementById("char-count");
+    const nameEl = document.getElementById("inp-name") as HTMLInputElement;
+    const bodyEl = document.getElementById("inp-body") as HTMLTextAreaElement;
+    const btn    = document.getElementById("board-btn") as HTMLButtonElement;
+    const errEl  = document.getElementById("form-error") as HTMLParagraphElement;
+    const countEl = document.getElementById("char-count") as HTMLSpanElement;
 
-    // Compteur de caractères
+    // Compteur
     bodyEl.addEventListener("input", () => {
       countEl.textContent = String(bodyEl.value.length);
     });
 
-    const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    const fmtNow = () => new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
-
-    function prependPost(name, body, postedAt) {
-      listEl.querySelector(".post-empty")?.remove();
-      const li = document.createElement("li");
-      li.className = styles.post;
-      li.innerHTML = `
-        <div class="${styles.meta}">
-          <span class="${styles.name}">${esc(name)}</span>
-          <time class="${styles.time}">${esc(postedAt)}</time>
-        </div>
-        <p class="${styles.body}">${esc(body)}</p>
-      `;
-      listEl.insertBefore(li, listEl.firstElementChild);
-    }
-
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       errEl.textContent = "";
+      
       const name = nameEl.value.trim() || "Anonyme";
       const body = bodyEl.value.trim();
 
-      if (!body) {
-        errEl.textContent = "Le message est vide.";
-        return;
-      }
+      if (!body) return;
 
       btn.disabled = true;
       const originalText = btn.textContent;
@@ -149,19 +134,22 @@ const styles = {
 
         if (!res.ok) throw new Error("Erreur serveur");
 
-        prependPost(name, body, fmtNow());
-        nameEl.value = "";
-        bodyEl.value = "";
+        // --- LA CLÉ EST ICI ---
+        // On demande à Astro de naviguer vers la même page.
+        // Cela déclenche le re-rendu SSR et met à jour la liste.
+        await navigate(window.location.pathname, { history: 'replace' });
+        
+        // Reset du formulaire après la navigation
+        form.reset();
         countEl.textContent = "0";
       } catch (err) {
-        errEl.textContent = "Échec de l'envoi.";
-      } finally {
+        errEl.textContent = "投稿に失敗しました。";
         btn.disabled = false;
+      } finally {
         btn.textContent = originalText;
       }
     });
   };
 
-  // Support pour Astro View Transitions
   document.addEventListener('astro:page-load', initBoard);
 </script>
