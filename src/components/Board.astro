@@ -44,7 +44,7 @@ const styles = {
     {posts.reverse().map((p,i) => (
       <li class={styles.post}>
         <div class={styles.meta}>
-          <span class="gray-500 mr-1">{i}.<>
+          <span class="gray-200 mr-1 text-[0.7rem]">{i+1}.<>
           <span class={styles.name}>{p.name}</span>
           <time class={styles.time} datetime={String(p.postedAt)}>
             {fmtDate(p.postedAt)}
@@ -55,7 +55,7 @@ const styles = {
     ))}
   </ol>
 
-  <div class="mt-12 pt-8 border-[#111] dark:border-[#e4e4e4]">
+  <div class="mt-8 border-[#111] dark:border-[#e4e4e4]">
     <form class="flex flex-col gap-3" id="board-form" novalidate>
       <input
         id="inp-name"
