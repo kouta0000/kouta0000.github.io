@@ -44,7 +44,7 @@ const styles = {
     {posts.reverse().map((p,i) => (
       <li class={styles.post}>
         <div class={styles.meta}>
-          <span class="gray-200 mr-1 text-[0.7rem]">{i+1}.<>
+          <span class="gray-200 text-[0.7rem]">{i+1}.<>
           <span class={styles.name}>{p.name}</span>
           <time class={styles.time} datetime={String(p.postedAt)}>
             {fmtDate(p.postedAt)}
