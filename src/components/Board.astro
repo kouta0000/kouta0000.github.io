@@ -1,18 +1,18 @@
 ---
-// 1. 静的書き出しを無効化し、リロードのたびにDBを読みに行く設定
+// 1. サーバーサイドレンダリングを強制（リロードのたびにDBを読み直す）
 export const prerender = false;
 
 import { db, BoardPost, asc } from "astro:db";
 import Layout from "@/layouts/Layout.astro";
 
-// 2. サーバーサイドで「現在」の全データを取得（これでロード時の「遅さ」と「消え」を撲滅）
-const initialPosts = await db
+// 2. サーバー側で全データを「古い順」に取得
+const posts = await db
   .select()
   .from(BoardPost)
   .orderBy(asc(BoardPost.postedAt));
 
 const styles = {
-  post: "py-5 border-b border-[#eee] dark:border-[#222] transition-all duration-500",
+  post: "py-5 border-b border-[#eee] dark:border-[#222]",
   meta: "flex gap-2 items-baseline mb-1",
   name: "text-[0.7rem] font-bold uppercase tracking-wider text-[#111] dark:text-[#eee]",
   time: "text-[0.62rem] text-[#aaa] font-mono",
@@ -25,7 +25,7 @@ const styles = {
   <section class="max-w-2xl mx-auto px-2 py-2 font-mono">
     
     <ol class="list-none p-0 m-0 mb-16 space-y-2" id="post-list">
-      {initialPosts.map((p, i) => (
+      {posts.map((p, i) => (
         <li class={styles.post}>
           <div class={styles.meta}>
             <span class="text-[#999] text-[0.7rem]">{i + 1}.</span>
@@ -39,64 +39,45 @@ const styles = {
       ))}
     </ol>
     
-    <div id="status-msg" class={`text-xs text-[#aaa] tracking-widest text-center py-10 uppercase ${initialPosts.length > 0 ? 'hidden' : ''}`}>
-      NO POSTS YET.
-    </div>
+    {posts.length === 0 && (
+      <div class="text-xs text-[#aaa] tracking-widest text-center py-10 uppercase">
+        NO POSTS YET.
+      </div>
+    )}
 
-    <div class="border-[#111] dark:border-[#eee] pt-0">
-      <form id="board-form" class="flex flex-col gap-2">
-        <input id="inp-name" class={styles.input} type="text" placeholder="NAME (OPTIONAL)" maxlength="50" />
-        <textarea id="inp-body" class={`${styles.input} min-h-[150px] resize-y`} placeholder="ENTER MESSAGE..." maxlength="400" required></textarea>
-        
-        <div class="flex justify-between items-center">
-          <span class="text-[0.65rem] text-[#aaa] font-bold">
-            <span id="char-count">0</span> / 400
-          </span>
-          <button type="submit" id="board-btn" class="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-12 py-4 text-[0.7rem] font-black hover:bg-[#333] dark:hover:bg-[#ccc] transition-all active:scale-95 disabled:opacity-20">
-            投稿
-          </button>
-        </div>
-        <p id="form-error" class="text-[0.65rem] text-red-500 italic mt-2 min-h-[1em]"></p>
-      </form>
-    </div>
+    <form id="board-form" class="flex flex-col gap-2 border-t pt-8 border-[#eee] dark:border-[#222]">
+      <input id="inp-name" name="name" class={styles.input} type="text" placeholder="NAME (OPTIONAL)" maxlength="50" />
+      <textarea id="inp-body" name="body" class={`${styles.input} min-h-[150px] resize-y`} placeholder="ENTER MESSAGE..." maxlength="400" required></textarea>
+      
+      <div class="flex justify-between items-center">
+        <span class="text-[0.65rem] text-[#aaa] font-bold">
+          <span id="char-count">0</span> / 400
+        </span>
+        <button type="submit" id="board-btn" class="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-12 py-4 text-[0.7rem] font-black hover:bg-[#333] dark:hover:bg-[#ccc] transition-all active:scale-95">
+          投稿
+        </button>
+      </div>
+      <p id="form-error" class="text-[0.65rem] text-red-500 italic mt-2"></p>
+    </form>
   </section>
 </Layout>
 
-<script define:vars={{ styles }}>
-  const list = document.getElementById("post-list");
+<script>
   const form = document.getElementById("board-form");
-  const statusMsg = document.getElementById("status-msg");
   const bodyInput = document.getElementById("inp-body");
   const charCount = document.getElementById("char-count");
-  const errorMsg = document.getElementById("form-error");
   const submitBtn = document.getElementById("board-btn");
 
-  const h = (s) => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const f = (d) => new Intl.DateTimeFormat("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(d));
-
-  function createPostNode(p, index) {
-    const li = document.createElement("li");
-    li.className = styles.post;
-    li.innerHTML = `
-      <div class="${styles.meta}">
-        <span class="text-[#999] text-[0.7rem]">${index}.</span>
-        <span class="${styles.name}">${h(p.name)}</span>
-        <time class="${styles.time}">${f(p.postedAt)}</time>
-      </div>
-      <p class="${styles.body}">${h(p.body)}</p>
-    `;
-    return li;
-  }
-
-  // 投稿処理 (CSR: クライアントサイドで即時反映)
-  form.addEventListener("submit", async (e) => {
+  // 3. 投稿処理
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("inp-name").value.trim() || "Anonymous";
+    
+    const name = document.getElementById("inp-name").value.trim();
     const body = bodyInput.value.trim();
     if (!body) return;
 
     submitBtn.disabled = true;
-    errorMsg.textContent = "";
+    submitBtn.textContent = "SENDING...";
 
     try {
       const res = await fetch("/api/board", {
@@ -106,30 +87,19 @@ const styles = {
       });
 
       if (!res.ok) throw new Error();
-      
-      const data = await res.json();
-      const newPost = data.post; // APIの { post: {...} } に対応
 
-      // リロードせずにリストの末尾に追加
-      const newIdx = list.children.length + 1;
-      const node = createPostNode(newPost, newIdx);
-      list.appendChild(node);
-      
-      form.reset();
-      charCount.textContent = "0";
-      statusMsg.classList.add("hidden");
+      // 【重要】投稿に成功したら、ページをリロードする。
+      // これにより、サーバー側の最新データ(initialPosts)が確実に読み込まれる。
+      window.location.reload();
+
     } catch (err) {
-      errorMsg.textContent = "FAILED TO POST.";
-    } finally {
+      document.getElementById("form-error").textContent = "FAILED TO POST.";
       submitBtn.disabled = false;
+      submitBtn.textContent = "投稿";
     }
   });
 
-  bodyInput.addEventListener("input", () => {
+  bodyInput?.addEventListener("input", () => {
     charCount.textContent = bodyInput.value.length;
   });
 </script>
-
-<style>
-  .hidden { display: none !important; }
-</style>
