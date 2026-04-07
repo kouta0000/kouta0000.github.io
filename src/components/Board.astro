@@ -1,14 +1,13 @@
 ---
 export const prerender = false;
 // src/components/Board.astro
-import { db, BoardPost, desc } from "astro:db";
+import { db, BoardPost, asc } from "astro:db";
 import Layout from "@/layouts/Layout.astro"
 
 const posts = await db
   .select()
   .from(BoardPost)
-  .orderBy(desc(BoardPost.postedAt))
-  .limit(50);
+  .orderBy(asc(BoardPost.postedAt);
 
 function fmtDate(d: Date | string | null): string {
   if (!d) return "";
