@@ -1,0 +1,148 @@
+---
+/**
+ * ReadingMeta.astro
+ * 文字数カウントと読了時間を表示するコンポーネント
+ *
+ * Usage:
+ *   import ReadingMeta from "@/components/ReadingMeta.astro";
+ *   <ReadingMeta content={rawContent} />
+ *
+ * Props:
+ *   content: string  — 記事の生テキスト（frontmatterを除いたMarkdown/プレーンテキスト）
+ *   lang?:   "ja" | "en" | "auto"  — 言語設定（デフォルト: "auto"）
+ */
+
+type Props = {
+  content: string;
+  lang?: "ja" | "en" | "auto";
+};
+
+const { content, lang = "auto" } = Astro.props;
+
+// --- 文字数カウント（空白・改行を除く） ---
+const charCount = content.replace(/\s/g, "").length;
+const charCountFormatted = charCount.toLocaleString("ja-JP");
+
+// --- 言語判定 ---
+// 日本語文字（ひらがな・カタカナ・漢字）の割合で自動判定
+function detectLang(text: string): "ja" | "en" {
+  const jaChars = (text.match(/[\u3040-\u9FFF]/g) || []).length;
+  return jaChars / text.length > 0.1 ? "ja" : "en";
+}
+
+const resolvedLang = lang === "auto" ? detectLang(content) : lang;
+
+// --- 読了時間計算 ---
+// 日本語: 約400-600字/分、英語: 約200-250 words/分
+let readingMinutes: number;
+
+if (resolvedLang === "ja") {
+  // 日本語は文字数ベース（500字/分）
+  readingMinutes = Math.ceil(charCount / 500);
+} else {
+  // 英語は単語数ベース（200 words/分）
+  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+  readingMinutes = Math.ceil(wordCount / 200);
+}
+
+const readingLabel =
+  resolvedLang === "ja"
+    ? `約 ${readingMinutes} 分で読めます`
+    : `${readingMinutes} min read`;
+
+const charLabel = resolvedLang === "ja" ? `${charCountFormatted} 文字` : `${charCountFormatted} chars`;
+---
+
+<div class="reading-meta" aria-label="記事情報">
+  <div class="reading-meta__inner">
+    <!-- 文字数 -->
+    <span class="reading-meta__item" title="文字数（空白除く）">
+      <svg
+        class="reading-meta__icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+      <span>{charLabel}</span>
+    </span>
+
+    <!-- セパレーター -->
+    <span class="reading-meta__sep" aria-hidden="true">·</span>
+
+    <!-- 読了時間 -->
+    <span class="reading-meta__item" title="推定読了時間">
+      <svg
+        class="reading-meta__icon"
+        xmlns="http://www.w3.org/2000/svg"
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span>{readingLabel}</span>
+    </span>
+  </div>
+</div>
+
+<style>
+  .reading-meta {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .reading-meta__inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    /* サイト既存の muted スタイルに合わせる */
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-foreground, currentColor);
+    opacity: 0.55;
+    letter-spacing: 0.01em;
+    transition: opacity 0.2s ease;
+  }
+
+  .reading-meta:hover .reading-meta__inner {
+    opacity: 0.8;
+  }
+
+  .reading-meta__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .reading-meta__icon {
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  .reading-meta__sep {
+    opacity: 0.4;
+    user-select: none;
+  }
+</style>
