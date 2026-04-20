@@ -108,19 +108,6 @@ const hasRelated = scored.length > 0;
                     >
                       {dateStr}
                     </time>
-
-                    <!-- 共通タグ -->
-                    {sharedTags.length > 0 && (
-                      <span class="related-posts__tags" aria-label="共通タグ">
-                        {sharedTags.slice(0, 2).map(tag => (
-                          <Tag
-                            tag={slugifyStr(tag)}
-                            tagName={tag}
-                            size="sm"
-                          />
-                        ))}
-                      </span>
-                    )}
                   </div>
                 </div>
 
